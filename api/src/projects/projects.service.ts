@@ -1,0 +1,30 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateProjectDto } from './dto/create-project.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+
+@Injectable()
+export class ProjectsService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  create(data: CreateProjectDto) {
+    return this.prisma.project.create({ data });
+  }
+
+  findAll() {
+    console.log('here logs');
+    return this.prisma.project.findMany({ orderBy: { createdAt: 'desc' } });
+  }
+
+  findOne(id: string) {
+    return this.prisma.project.findUnique({ where: { id } });
+  }
+
+  update(id: string, data: UpdateProjectDto) {
+    return this.prisma.project.update({ where: { id }, data });
+  }
+
+  remove(id: string) {
+    return this.prisma.project.delete({ where: { id } });
+  }
+}
