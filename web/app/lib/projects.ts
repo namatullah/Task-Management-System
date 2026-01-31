@@ -19,14 +19,20 @@ export async function create(data: any) {
 }
 export async function edit(id: string, data: any) {
   const res = await fetch(`${API_URL}/projects/${id}`, {
-    method: "PUT", // or PATCH depending on your NestJS API
+    method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to update project");
   return res.json();
 }
-
+export async function getById(id: string) {
+  const res = await fetch(`${API_URL}/projects/${id}`, {
+    method: "GET",
+  });
+  if (!res.ok) throw new Error("Failed to Fetch project");
+  return res.json();
+}
 export async function remove(id: string) {
   const res = await fetch(`${API_URL}/projects/${id}`, {
     method: "DELETE",

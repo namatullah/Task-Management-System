@@ -1,6 +1,8 @@
 "use server";
 import { list } from "@/app/lib/projects";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import Update from "./ui/update";
 
 const ProjectTable = async () => {
   const projects = await list();
@@ -24,14 +26,14 @@ const ProjectTable = async () => {
         <tbody className="divide-y divide-gray-200">
           {projects.map((project: any) => (
             <tr key={project.id} className="hover:bg-gray-100 text-sm">
-              <td className="px-6 py-4 align-top" width="30%">{project.name}</td>
+              <td className="px-6 py-4 align-top" width="30%">
+                {project.name}
+              </td>
               <td className="px-6 py-4 align-top" width="40%">
                 {project.description}
               </td>
               <td className="px-6 py-4 flex gap-2 align-top">
-                <button className="flex items-center gap-2 px-4 py-2 border border-blue-200 rounded hover:bg-blue-100 cursor-pointer">
-                  <PencilIcon className="w-5 h-5 text-blue-600" />
-                </button>
+                <Update project={project} />
                 <button className="flex items-center gap-2 px-4 py-2 border border-blue-200 rounded hover:bg-blue-100 cursor-pointer">
                   <TrashIcon className="w-5 h-5 text-red-600" />
                 </button>
