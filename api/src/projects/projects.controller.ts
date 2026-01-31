@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -21,8 +22,12 @@ export class ProjectsController {
   }
 
   @Get()
-  findAll() {
-    return this.projectsService.findAll();
+  findAll(
+    @Query('query') query = '',
+    @Query('page') page = '1',
+    @Query('ITEMS_PER_PAGE') ITEMS_PER_PAGE = 10,
+  ) {
+    return this.projectsService.findAll(query, +page, +ITEMS_PER_PAGE);
   }
 
   @Get(':id')

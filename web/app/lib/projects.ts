@@ -1,8 +1,18 @@
 const API_URL = "http://localhost:3001";
 
-export async function list() {
+export async function list(
+  query: string,
+  page: number,
+  ITEMS_PER_PAGE: number,
+) {
   await new Promise((resolve) => setTimeout(resolve, 2000));
-  const res = await fetch(`${API_URL}/projects`, {
+
+  const params = new URLSearchParams({
+    query,
+    page: page.toString(),
+    ITEMS_PER_PAGE: ITEMS_PER_PAGE.toString(),
+  });
+  const res = await fetch(`${API_URL}/projects?${params.toString()}`, {
     next: { revalidate: 100 },
   });
   if (!res.ok) throw new Error("Failed to fetch projects");

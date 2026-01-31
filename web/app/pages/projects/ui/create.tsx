@@ -35,7 +35,7 @@ export default function Create() {
                 </label>
                 <input
                   name="name"
-                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
+                  className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
                   aria-describedby="name-error"
                 />
                 <div id="name-error" aria-live="polite" aria-atomic="true">
@@ -55,7 +55,7 @@ export default function Create() {
                 <textarea
                   name="description"
                   rows={3}
-                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
+                  className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
                   aria-describedby="description-error"
                 />
                 <div

@@ -40,7 +40,7 @@ export default function Update({ project }: { project: any }) {
                   name="name"
                   value={name}
                   onChange={({ target }) => setName(target.value)}
-                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
+                  className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
                   aria-describedby="name-error"
                 />
                 <div id="name-error" aria-live="polite" aria-atomic="true">
@@ -62,7 +62,7 @@ export default function Update({ project }: { project: any }) {
                   rows={3}
                   value={description}
                   onChange={({ target }) => setDescription(target.value)}
-                  className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
+                  className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
                   aria-describedby="description-error"
                 />
                 <div
