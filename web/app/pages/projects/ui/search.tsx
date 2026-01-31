@@ -9,7 +9,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  console.log(pathname)
+  console.log(pathname);
 
   const handleSearch = (term: string) => {
     const params = new URLSearchParams(searchParams);
@@ -18,6 +18,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     } else {
       params.delete("query");
     }
+    params.set("page", "1");
     replace(`${pathname}?${params.toString()}`);
   };
 

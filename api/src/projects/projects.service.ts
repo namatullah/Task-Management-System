@@ -12,8 +12,7 @@ export class ProjectsService {
   }
 
   async findAll(query: string, page: number, ITEMS_PER_PAGE: number) {
-    console.log('all')
-    const skip = (page - 1) * ITEMS_PER_PAGE;
+    console.log('all');
     const where = query
       ? {
           OR: [
@@ -22,16 +21,17 @@ export class ProjectsService {
           ],
         }
       : undefined;
+    const total = await this.prisma.project.count({ where });
+    const total_page = Math.ceil(total / ITEMS_PER_PAGE);
+
+    const skip = (page - 1) * ITEMS_PER_PAGE;
     const projects = await this.prisma.project.findMany({
       where,
       take: ITEMS_PER_PAGE,
       skip,
       orderBy: { createdAt: 'desc' },
     });
-
-    const total = await this.prisma.project.count({ where });
-
-    return { projects, total_page: Math.ceil(total / ITEMS_PER_PAGE) };
+    return { projects, total_page };
   }
 
   findOne(id: string) {
