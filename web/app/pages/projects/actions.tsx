@@ -1,5 +1,5 @@
 "use server";
-import { create, edit } from "@/app/lib/projects";
+import { create, edit, remove } from "@/app/lib/projects";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -72,30 +72,16 @@ export async function updateProject(
   revalidatePath("/pages/projects");
   redirect("/pages/projects");
 }
-// const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
-// export async function updateInvoice(id: string, formData: FormData) {
-//   const { customerId, amount, status } = UpdateInvoice.parse({
-//     customerId: formData.get("customerId"),
-//     amount: formData.get("amount"),
-//     status: formData.get("status"),
-//   });
+export async function deleteProject(id: string, prevState: State) {
+  try {
+    await remove(id);
+  } catch (error) {
+    return {
+      message: "Database Error: Failed to update Projects.",
+    };
+  }
 
-//   const amountInCents = amount * 100;
-//   try {
-//     await pool.query(
-//       `
-//     UPDATE invoices
-//     SET customer_id = ?, amount = ?, status = ?
-//     WHERE id = ?
-//   `,
-//       [customerId, amountInCents, status, id],
-//     );
-//   } catch (error) {
-//     console.error(error);
-//     return { message: "Database Error: Failed to Update Invoice." };
-//   }
-
-//   revalidatePath("/dashboard/invoices");
-//   redirect("/dashboard/invoices");
-// }
+  revalidatePath("/pages/projects");
+  redirect("/pages/projects");
+}

@@ -80,14 +80,6 @@ export default function Create() {
 
               <div className="flex justify-end gap-2 pt-2">
                 <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="px-4 py-2 border rounded hover:bg-gray-100"
-                >
-                  Cancel
-                </button>
-
-                <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >

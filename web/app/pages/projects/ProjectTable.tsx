@@ -3,6 +3,7 @@ import { list } from "@/app/lib/projects";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Update from "./ui/update";
+import Delete from "./ui/delete";
 
 const ProjectTable = async () => {
   const projects = await list();
@@ -34,9 +35,7 @@ const ProjectTable = async () => {
               </td>
               <td className="px-6 py-4 flex gap-2 align-top">
                 <Update project={project} />
-                <button className="flex items-center gap-2 px-4 py-2 border border-blue-200 rounded hover:bg-blue-100 cursor-pointer">
-                  <TrashIcon className="w-5 h-5 text-red-600" />
-                </button>
+                <Delete project={project} />
               </td>
             </tr>
           ))}

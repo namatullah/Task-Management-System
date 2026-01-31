@@ -26,7 +26,7 @@ export default function Update({ project }: { project: any }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Create Project</h3>
+              <h3 className="text-lg font-semibold">Update Project</h3>
               <button onClick={() => setOpen(false)}>
                 <XMarkIcon className="w-5 h-5 text-red-500" />
               </button>
@@ -85,18 +85,10 @@ export default function Update({ project }: { project: any }) {
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="px-4 py-2 border rounded hover:bg-gray-100"
-                >
-                  Cancel
-                </button>
-
-                <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
-                  Create
+                  Update
                 </button>
               </div>
             </form>
