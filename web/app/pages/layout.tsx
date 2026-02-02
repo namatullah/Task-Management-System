@@ -1,6 +1,6 @@
 import React from "react";
-import SideNav from "../ui/layouts/SideNav";
-import AppBar from "../ui/layouts/AppBar";
+import SideNav from "../_ui/layouts/SideNav";
+import AppBar from "../_ui/layouts/AppBar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

@@ -4,16 +4,18 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
+import { CreateAuthDto } from 'src/auth/dto/create-auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(email: string, password: string, name?: string) {
-    const hashedPassword = await bcrypt.hash(password, 10);
+  async createUser(createAuthDto: CreateAuthDto) {
+    const hashedPassword = await bcrypt.hash(createAuthDto.password, 10);
+    createAuthDto.password = hashedPassword;
     return this.prisma.user.create({
-      data: { email, password: hashedPassword, name },
+      data: createAuthDto,
     });
   }
 
@@ -29,5 +31,9 @@ export class UserService {
     if (!valid) throw new UnauthorizedException('Invalid credential');
 
     return user;
+  }
+
+  async validatePassword(user: any, plain: string) {
+    return bcrypt.compare(plain, user.password);
   }
 }

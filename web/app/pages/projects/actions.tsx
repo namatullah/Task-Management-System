@@ -1,5 +1,5 @@
 "use server";
-import { create, edit, remove } from "@/app/lib/projects";
+import { create, edit, remove } from "@/app/_lib/projects";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";

@@ -1,5 +1,5 @@
 "use client";
-import { links } from "@/app/shared/types";
+import { links } from "@/app/_shared/types";
 import { Squares2X2Icon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";

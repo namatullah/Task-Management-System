@@ -1,10 +1,10 @@
 "use server";
-import { list } from "@/app/lib/projects";
-import Update from "./ui/update";
-import Delete from "./ui/delete";
-import Search from "./ui/search";
-import Pagination from "@/app/ui/shared/pagination";
-import { PAGINATION } from "@/app/shared/helper";
+import { list } from "@/app/_lib/projects";
+import Update from "./_ui/update";
+import Delete from "./_ui/delete";
+import Search from "./_ui/search";
+import Pagination from "@/app/_ui/shared/pagination";
+import { PAGINATION } from "@/app/_shared/helper";
 
 const Table = async ({ query, page }: { query: string; page: number }) => {
   const { projects, total_page } = await list(

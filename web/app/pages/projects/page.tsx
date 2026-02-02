@@ -1,8 +1,8 @@
 "use server";
-import Create from "./ui/create";
+import Create from "./_ui/create";
 import { Suspense } from "react";
-import { ProjectTableSkeleton } from "@/app/ui/shared/skeletons";
-import ProjectsToast from "./ui/projectToast";
+import { ProjectTableSkeleton } from "@/app/_ui/shared/skeletons";
+import ProjectsToast from "./_ui/projectToast";
 import Table from "./table";
 
 const Page = async (props: {
