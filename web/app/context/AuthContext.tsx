@@ -1,6 +1,7 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { signOutAction } from "../auth/actions";
 interface User {
   id: string;
   email: string;
@@ -12,7 +13,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (token: string, user: User) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -40,11 +41,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     Cookies.set("auth_user", JSON.stringify(newUser), { expires: 7 });
   };
 
-  const logout = () => {
+  const logout = async () => {
     setToken(null);
     setUser(null);
     Cookies.remove("auth_token");
     Cookies.remove("auth_user");
+    await signOutAction();
   };
 
   return (

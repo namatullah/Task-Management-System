@@ -1,11 +1,7 @@
-import {
-  BellIcon,
-  CheckCircleIcon,
-  HomeIcon,
-  HomeModernIcon,
-  PlusCircleIcon,
-} from "@heroicons/react/24/outline";
+"use client";
+import { useAuth } from "@/app/context/AuthContext";
 export default function AppBar() {
+  const { user, isLoading } = useAuth();
   return (
     <header className="h-16 bg-white shadow-md flex items-center justify-between px-6 z-10 border-b border-gray-100">
       <div className="flex items-center gap-4">
@@ -13,12 +9,19 @@ export default function AppBar() {
       </div>
 
       <div className="flex items-center gap-4">
-        <BellIcon className="w-5 h-5 cursor-pointer" />
-        <img
-          src="/avatar.png"
-          alt="User"
-          className="w-8 h-8 rounded-full border"
-        />
+        {isLoading ? (
+          <div className="w-20 h-4 bg-gray-200 rounded animate-pulse">
+            Loading...
+          </div>
+        ) : (
+          user && (
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-700">
+                Hi, {user.name || user.email.split("@")[0]}
+              </span>
+            </div>
+          )
+        )}
       </div>
     </header>
   );

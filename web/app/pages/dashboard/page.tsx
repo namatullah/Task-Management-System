@@ -1,9 +1,11 @@
 import { me } from "@/app/_lib/auth";
+import DashboardPage from "./Dashboard";
 
 const Page = async () => {
-  const user = await me();
-  console.log(user);
-  return <div>Dashboard page</div>;
+  return <div>
+    <h1>Dashboard</h1>
+    <DashboardPage />
+  </div>;
 };
 
 export default Page;

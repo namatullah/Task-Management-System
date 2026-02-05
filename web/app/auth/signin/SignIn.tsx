@@ -23,7 +23,7 @@ const SignIn = () => {
 
     if (result.success) {
       login(result.data.accessToken, result.data.user);
-      router.push("/dashboard");
+      router.push("/pages/dashboard");
     } else {
       setError(result.error || "Sign in failed");
     }

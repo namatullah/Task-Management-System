@@ -6,6 +6,7 @@ import { createProject, State } from "../actions";
 
 export default function Create() {
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(createProject, initialState);
 
