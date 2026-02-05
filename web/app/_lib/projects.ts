@@ -12,7 +12,7 @@ export async function list(
     page: page.toString(),
     ITEMS_PER_PAGE: ITEMS_PER_PAGE.toString(),
   });
-  const res = await fetch(`${API_URL}/projects?${params.toString()}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects?${params.toString()}`, {
     next: { revalidate: 100 },
   });
   if (!res.ok) throw new Error("Failed to fetch projects");

@@ -1,92 +1,59 @@
 "use server";
-import { create, edit, remove } from "@/app/_lib/projects";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { z } from "zod";
-import { signupUser } from "../_lib/auth";
 
-export type SignUpState = {
-  errors?: {
-    name?: string[];
-    email?: string[];
-    password?: string[];
-    confirmPassword?: string[];
-  };
-  message?: string | null;
-};
+export async function signInAction(formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
-const SignUpFormSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().min(1, "Email is required"),
-  password: z.string().min(1, "Email is required"),
-  confirmPassword: z.string().min(1, "Email is required"),
-});
-
-// const CreateProject = FormSchema.omit({ id: true });
-
-export async function signup(prevState: SignUpState, formData: FormData) {
-  const validatedFields = SignUpFormSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    confirmPassword: formData.get("confirmPassword"),
-  });
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to sign up",
-    };
-  }
-  const { name, email, password, confirmPassword } = validatedFields.data;
   try {
-    await signupUser({ name, email, password });
-  } catch (error) {
-    return {
-      message: "Database Error: Failed to create account",
-    };
-  }
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      },
+    );
 
-  redirect("/pages/dashboard");
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { success: false, error: data.message || "Sign in failed" };
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    return { success: false, error: "Network error" };
+  }
 }
 
-// const UpdateProject = FormSchema.omit({ id: true });
-// export async function updateProject(
-//   id: string,
-//   prevState: State,
-//   formData: FormData,
-// ) {
-//   const validatedFields = UpdateProject.safeParse({
-//     name: formData.get("name"),
-//     description: formData.get("description"),
-//   });
-//   if (!validatedFields.success) {
-//     return {
-//       errors: validatedFields.error.flatten().fieldErrors,
-//       message: "Missing Fields. Failed to update  projects",
-//     };
-//   }
-//   const { name, description } = validatedFields.data;
-//   try {
-//     await edit(id, { name, description });
-//   } catch (error) {
-//     return {
-//       message: "Database Error: Failed to update Projects.",
-//     };
-//   }
+export async function signUpAction(formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const name = formData.get("name") as string;
 
-//   revalidatePath("/pages/projects");
-//   redirect("/pages/projects?toast=updated");
-// }
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, name }),
+      },
+    );
 
-// export async function deleteProject(id: string, prevState: State) {
-//   try {
-//     await remove(id);
-//   } catch (error) {
-//     return {
-//       message: "Database Error: Failed to update Projects.",
-//     };
-//   }
+    const data = await response.json();
 
-//   revalidatePath("/pages/projects");
-//   redirect("/pages/projects?toast=deleted");
-// }
+    if (!response.ok) {
+      return { success: false, error: data.message || "Sign up failed" };
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    return { success: false, error: "Network error" };
+  }
+}
+
+export async function signOutAction() {
+  // Clear cookies on server-side if needed
+  return { success: true };
+}
