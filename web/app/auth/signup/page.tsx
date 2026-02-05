@@ -2,35 +2,20 @@
 import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signUpAction } from "../actions";
 import clsx from "clsx";
-
-interface FormState {
-  message: string | null;
-  errors: {
-    name?: string[];
-    email?: string[];
-    password?: string[];
-    confirmPassword?: string[];
-    general?: string[];
-  };
-  success?: boolean;
-}
+import { signUpAction, SignUpFormState } from "./action";
 
 const SignUp = () => {
   const router = useRouter();
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
-  const initialState: FormState = {
+  const initialState: SignUpFormState = {
     message: null,
     errors: {},
     success: false,
   };
-
   const [state, formAction, isPending] = useActionState(
     signUpAction,
     initialState,
@@ -44,19 +29,13 @@ const SignUp = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
         <h2 className="text-3xl font-bold text-center mb-6">Sign Up</h2>
-        {/* {state.errors?.general && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded">
-            {state.errors.general.map((error, index) => (
-              <p key={index}>{error}</p>
-            ))}
+
+        {state.message && (
+          <div className="mb-4 p-3 text-xs bg-red-50 border border-red-200 text-red-700 rounded">
+            {state.message}
           </div>
         )}
 
-        {state.message && !state.errors?.general && (
-          <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded">
-            {state.message}
-          </div>
-        )} */}
         <form action={formAction} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
@@ -65,13 +44,15 @@ const SignUp = () => {
               name="name"
               className={clsx(
                 "w-full px-4 py-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-none border-gray-300",
-                {},
+                state.errors.name
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500",
               )}
               placeholder="Full Name"
               aria-describedby="name-error"
             />
             {state.errors?.name && (
-              <div id="name-error" className="mt-1 text-sm text-red-600">
+              <div id="name-error" className="mt-1 text-xs text-red-500">
                 {state.errors.name.map((error, index) => (
                   <p key={index}>{error}</p>
                 ))}
@@ -86,7 +67,7 @@ const SignUp = () => {
               name="email"
               className={clsx(
                 "w-full px-4 py-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-none",
-                state.errors.name
+                state.errors.email
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500",
               )}
@@ -94,7 +75,7 @@ const SignUp = () => {
               aria-describedby="email-error"
             />
             {state.errors?.email && (
-              <div id="email-error" className="mt-1 text-sm text-red-600">
+              <div id="email-error" className="mt-1 text-xs text-red-500">
                 {state.errors.email.map((error, index) => (
                   <p key={index}>{error}</p>
                 ))}
@@ -109,8 +90,8 @@ const SignUp = () => {
                 type={showPassword ? "text" : "password"}
                 name="password"
                 className={clsx(
-                  "w-full px-4 py-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-none ",
-                  state.errors.name
+                  "w-full px-4 py-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-none",
+                  state.errors?.password
                     ? "border-red-500 focus:ring-red-500"
                     : "border-gray-300 focus:ring-blue-500",
                 )}
@@ -125,15 +106,14 @@ const SignUp = () => {
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
-
-              {state.errors?.password && (
-                <div id="password-error" className="mt-1 text-sm text-red-600">
-                  {state.errors.password.map((error, index) => (
-                    <p key={index}>{error}</p>
-                  ))}
-                </div>
-              )}
             </div>
+            {state.errors?.password && (
+              <div id="password-error" className="mt-1 text-xs text-red-500">
+                {state.errors.password.map((error, index) => (
+                  <p key={index}>{error}</p>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>
@@ -144,8 +124,8 @@ const SignUp = () => {
               type="password"
               name="confirmPassword"
               className={clsx(
-                "w-full px-4 py-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-none ",
-                state.errors.name
+                "w-full px-4 py-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-none",
+                state.errors.confirmPassword
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500",
               )}
@@ -154,10 +134,7 @@ const SignUp = () => {
             />
 
             {state.errors?.confirmPassword && (
-              <div
-                id="confirmPassword-error"
-                className="mt-1 text-sm text-red-600"
-              >
+              <div id="password-error" className="mt-1 text-xs text-red-500">
                 {state.errors.confirmPassword.map((error, index) => (
                   <p key={index}>{error}</p>
                 ))}
@@ -200,7 +177,7 @@ const SignUp = () => {
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          <Link href="signin" className="text-blue-600 hover:underline">
+          <Link href="/auth/signin" className="text-blue-600 hover:underline">
             Already have an account? Sign In
           </Link>
         </div>
