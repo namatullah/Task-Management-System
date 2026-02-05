@@ -14,7 +14,7 @@ export default function Create() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-4 py-2 border border-blue-200 rounded hover:bg-blue-100"
+        className="flex items-center gap-2 px-4 py-2 border border-blue-200 rounded hover:bg-blue-100 cursor-pointer"
       >
         <PlusIcon className="w-5 h-5 text-blue-600" />
         Add Project
