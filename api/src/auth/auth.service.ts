@@ -1,39 +1,65 @@
+import * as bcrypt from 'bcryptjs';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { SignInDto, SignUpDto } from './dto/auth.dto';
+import { emit } from 'process';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UserService,
+    private prisma: PrismaService,
     private jwtService: JwtService,
   ) {}
 
-  async signIn(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email);
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+  async signUp(signUpDto: SignUpDto) {
+    console.log('signup');
+    const hashedPassword = await bcrypt.hash(signUpDto.password, 10);
+    const user = await this.prisma.user.create({
+      data: {
+        email: signUpDto.email,
+        password: hashedPassword,
+        name: signUpDto.name,
+        role: signUpDto.role,
+      },
+    });
+    const { password, ...result } = user;
+    return result;
+  }
 
-    const isValid = await this.usersService.validatePassword(
+  async signIn(signInDto: SignInDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: signInDto.email },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid Credential');
+    }
+
+    const passwordValid = await bcrypt.compare(
+      signInDto.password,
       user.password,
-      password,
     );
-    if (!isValid) throw new UnauthorizedException('Invalid Password');
-
-    const payload = {
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-      name: user.name,
-    };
-    const token = this.jwtService.sign(payload);
+    if (!passwordValid) {
+      throw new UnauthorizedException('Invalid Credential');
+    }
+    const payload = { sub: user.id, email: user.email };
+    const accessToken = this.jwtService.sign(payload);
     return {
-      token,
+      accessToken,
       user: {
         id: user.id,
         email: user.email,
-        role: user.role,
         name: user.name,
+        role: user.role,
       },
     };
+  }
+
+  async validateUser(userId: string) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, email: true, name: true },
+    });
   }
 }
