@@ -3,7 +3,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SignInDto, SignUpDto } from './dto/auth.dto';
-import { emit } from 'process';
 
 @Injectable()
 export class AuthService {
@@ -13,14 +12,17 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
-    console.log('signup');
+    console.log('signup', signUpDto);
     const hashedPassword = await bcrypt.hash(signUpDto.password, 10);
+    const role =
+      signUpDto.adminToken === process.env.ADMIN_TOKEN ? 'ADMIN' : 'USER';
+
     const user = await this.prisma.user.create({
       data: {
         email: signUpDto.email,
         password: hashedPassword,
         name: signUpDto.name,
-        role: signUpDto.role,
+        role,
       },
     });
     const { password, ...result } = user;

@@ -35,7 +35,7 @@ export async function signUpAction(
     password: formData.get("password") as string,
     confirmPassword: formData.get("confirmPassword") as string,
   };
-
+  const adminToken = formData.get("adminToken") as string;
   const validatedFields = signUpSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
@@ -49,12 +49,13 @@ export async function signUpAction(
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
   try {
+    const data = validatedFields.data;
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validatedFields.data),
+        body: JSON.stringify({ ...data, adminToken }),
       },
     );
 

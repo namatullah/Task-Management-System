@@ -3,6 +3,7 @@ import { PAGINATION } from "@/app/_shared/helper";
 import Pagination from "@/app/_ui/shared/pagination";
 import Search from "../../_ui/shared/search";
 import ChangeRole from "./_ui/role/change-role";
+import ChangeStatus from "./_ui/status/change-status";
 
 const UsersTable = async ({ query, page }: { query: string; page: number }) => {
   const { users, total_page } = await list(
@@ -52,7 +53,7 @@ const UsersTable = async ({ query, page }: { query: string; page: number }) => {
               </td>
               <td className="px-6 py-2 flex gap-2 align-top">
                 <ChangeRole user={user} />
-                <Delete user={user} />
+                <ChangeStatus user={user} />
               </td>
             </tr>
           ))}

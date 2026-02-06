@@ -40,8 +40,8 @@ export async function createProject(prevState: State, formData: FormData) {
     };
   }
 
-  revalidatePath("/pages/projects");
-  redirect("/pages/projects?toast=created");
+  revalidatePath("/projects");
+  redirect("/projects?toast=created");
 }
 
 const UpdateProject = FormSchema.omit({ id: true });
@@ -69,8 +69,8 @@ export async function updateProject(
     };
   }
 
-  revalidatePath("/pages/projects");
-  redirect("/pages/projects?toast=updated");
+  revalidatePath("/projects");
+  redirect("/projects?toast=updated");
 }
 
 export async function deleteProject(id: string, prevState: State) {
@@ -82,6 +82,6 @@ export async function deleteProject(id: string, prevState: State) {
     };
   }
 
-  revalidatePath("/pages/projects");
-  redirect("/pages/projects?toast=deleted");
+  revalidatePath("/projects");
+  redirect("/projects?toast=deleted");
 }

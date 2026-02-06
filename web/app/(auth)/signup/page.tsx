@@ -150,10 +150,26 @@ const SignUp = () => {
               </div>
             )}
           </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              If you are admin provide token
+            </label>
+            <input
+              type="text"
+              name="adminToken"
+              className={
+                "w-full px-4 py-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-none border-gray-300"
+              }
+              placeholder="Admin Token"
+            />
+          </div>
+
           <LoadingButton
             type="submit"
             isLoading={isPending}
             loadingText="Creating account..."
+            widthFull={true}
           >
             Sign Up
           </LoadingButton>

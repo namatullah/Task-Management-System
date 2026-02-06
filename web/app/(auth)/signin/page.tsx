@@ -129,13 +129,17 @@ const SignIn = () => {
             type="submit"
             isLoading={isPending}
             loadingText="Signing in ..."
+            widthFull={true}
           >
             Sign In
           </LoadingButton>
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          <Link href="/signup" className="text-blue-600 hover:underline cursor-pointer">
+          <Link
+            href="/signup"
+            className="text-blue-600 hover:underline cursor-pointer"
+          >
             Don't have an account? Sign Up
           </Link>
         </div>

@@ -28,7 +28,7 @@ export default function ProjectsToast() {
         break;
     }
 
-    router.replace("/pages/projects", { scroll: false });
+    router.replace("/projects", { scroll: false });
   }, [toastType, router]);
 
   return null;

@@ -18,6 +18,9 @@ export class SignUpDto {
 
   @IsString()
   role: Role;
+
+  @IsString()
+  adminToken: string;
 }
 
 export class SignInDto {

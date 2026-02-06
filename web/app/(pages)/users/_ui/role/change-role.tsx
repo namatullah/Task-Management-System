@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { changeRoleAction } from "./action";
+import { LoadingButton } from "@/app/_ui/shared/LoadingButton";
 
 const ChangeRole = ({ user }: { user: any }) => {
   const [open, setOpen] = useState(false);
@@ -12,7 +13,10 @@ const ChangeRole = ({ user }: { user: any }) => {
     message: null,
   };
   const changeRoleWithId = changeRoleAction.bind(null, user.id);
-  const [state, formAction] = useActionState(changeRoleWithId, initialState);
+  const [state, formAction, isPending] = useActionState(
+    changeRoleWithId,
+    initialState,
+  );
 
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedRole(e.target.value);
@@ -75,12 +79,20 @@ const ChangeRole = ({ user }: { user: any }) => {
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <button
+                {/* <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
                   Change
-                </button>
+                </button> */}
+
+                <LoadingButton
+                  type="submit"
+                  isLoading={isPending}
+                  loadingText="Changing role..."
+                >
+                  Changes
+                </LoadingButton>
               </div>
             </form>
           </div>

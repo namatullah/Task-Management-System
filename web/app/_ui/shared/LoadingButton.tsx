@@ -10,6 +10,7 @@ interface LoadingButtonProps {
   className?: string;
   variant?: "primary" | "secondary" | "danger" | "success";
   size?: "sm" | "md" | "lg";
+  widthFull?: boolean;
 }
 
 export function LoadingButton({
@@ -22,6 +23,7 @@ export function LoadingButton({
   className = "",
   variant = "primary",
   size = "md",
+  widthFull = false,
 }: LoadingButtonProps) {
   // Variant styles
   const variantStyles = {
@@ -37,15 +39,15 @@ export function LoadingButton({
     md: "py-3 px-4 text-base min-h-[40px] max-h-[40px]",
     lg: "py-4 px-6 text-lg min-h-[52px] max-h-[52px]",
   };
-
+  const width = widthFull ? "w-full" : "";
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled || isLoading}
       className={`
-        w-full rounded transition disabled:opacity-50 disabled:cursor-not-allowed
-        flex items-center justify-center font-medium cursor-pointer
+        ${width} rounded transition disabled:opacity-50 disabled:cursor-not-allowed text-sm
+        flex items-center justify-center cursor-pointer
         ${variantStyles[variant]}
         ${sizeStyles[size]}
         ${className}
