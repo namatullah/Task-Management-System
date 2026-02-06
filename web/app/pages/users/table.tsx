@@ -1,13 +1,12 @@
-"use server";
-import { list } from "@/app/_lib/projects";
-import Update from "./_ui/update";
-import Delete from "./_ui/delete";
-import Search from "../../_ui/shared/search";
-import Pagination from "@/app/_ui/shared/pagination";
+import { list } from "@/app/_lib/users";
 import { PAGINATION } from "@/app/_shared/helper";
+import Pagination from "@/app/_ui/shared/pagination";
+import Search from "../../_ui/shared/search";
+import Update from "./_ui/update";
+import Delete from "./_ui/delete/delete";
 
-const Table = async ({ query, page }: { query: string; page: number }) => {
-  const { projects, total_page } = await list(
+const UsersTable = async ({ query, page }: { query: string; page: number }) => {
+  const { users, total_page } = await list(
     query,
     page,
     PAGINATION.ITEMS_PER_PAGE,
@@ -21,7 +20,7 @@ const Table = async ({ query, page }: { query: string; page: number }) => {
               colSpan={3}
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
-              <Search placeholder="Search projects..." />
+              <Search placeholder="Search users..." />
             </th>
           </tr>
           <tr>
@@ -29,7 +28,10 @@ const Table = async ({ query, page }: { query: string; page: number }) => {
               Name
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Description
+              Email
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Role
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Actions
@@ -38,17 +40,20 @@ const Table = async ({ query, page }: { query: string; page: number }) => {
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          {projects.map((project: any) => (
-            <tr key={project.id} className="hover:bg-gray-100 text-sm">
+          {users.map((user: any) => (
+            <tr key={user.id} className="hover:bg-gray-100 text-sm">
               <td className="px-6 py-2 align-top" width="30%">
-                {project.name}
+                {user.name}
               </td>
               <td className="px-6 py-2 align-top" width="40%">
-                {project.description}
+                {user.email}
+              </td>
+              <td className="px-6 py-2 align-top" width="40%">
+                {user.role}
               </td>
               <td className="px-6 py-2 flex gap-2 align-top">
-                <Update project={project} />
-                <Delete project={project} />
+                {/* <Update user={user} /> */}
+                <Delete user={user} />
               </td>
             </tr>
           ))}
@@ -63,4 +68,4 @@ const Table = async ({ query, page }: { query: string; page: number }) => {
   );
 };
 
-export default Table;
+export default UsersTable;

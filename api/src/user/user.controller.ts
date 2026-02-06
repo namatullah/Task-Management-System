@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 // import { UsersService } from './users.service';
 import { UserService } from './user.service';
 
@@ -6,10 +14,14 @@ import { UserService } from './user.service';
 export class UsersController {
   constructor(private readonly usersService: UserService) {}
 
-  //   @Get()
-  //   findAll() {
-  //     return this.usersService.findAll();
-  //   }
+  @Get()
+  findAll(
+    @Query('query') query = '',
+    @Query('page') page = '1',
+    @Query('ITEMS_PER_PAGE') ITEMS_PER_PAGE = 10,
+  ) {
+    return this.usersService.findAll(query, +page, +ITEMS_PER_PAGE);
+  }
 
   //   @Patch(':id/edit')
   //   updateUser(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {

@@ -1,9 +1,6 @@
-import {
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { SignUpDto } from 'src/auth/dto/auth.dto';
+import { Role, SignUpDto } from 'src/auth/dto/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -34,5 +31,29 @@ export class UserService {
 
   async validatePassword(user: any, plain: string) {
     return bcrypt.compare(plain, user.password);
+  }
+
+  async findAll(query: string, page: number, ITEMS_PER_PAGE: number) {
+    console.log('all');
+    const where = query
+      ? {
+          OR: [
+            { name: { contains: query } },
+            { email: { contains: query } },
+            { role: { contains: query } },
+          ],
+        }
+      : undefined;
+    const total = await this.prisma.user.count({ where });
+    const total_page = Math.ceil(total / ITEMS_PER_PAGE);
+
+    const skip = (page - 1) * ITEMS_PER_PAGE;
+    const users = await this.prisma.user.findMany({
+      where,
+      take: ITEMS_PER_PAGE,
+      skip,
+      orderBy: { createdAt: 'desc' },
+    });
+    return { users, total_page };
   }
 }
