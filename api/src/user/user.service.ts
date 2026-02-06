@@ -1,5 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
+import { log } from 'console';
 import { Role, SignUpDto } from 'src/auth/dto/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -34,7 +39,6 @@ export class UserService {
   }
 
   async findAll(query: string, page: number, ITEMS_PER_PAGE: number) {
-    console.log('all');
     const where = query
       ? {
           OR: [
@@ -55,5 +59,13 @@ export class UserService {
       orderBy: { createdAt: 'desc' },
     });
     return { users, total_page };
+  }
+
+  async changeRole(id: string, role: string) {
+    const user = this.prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return this.prisma.user.update({ where: { id }, data: { role } });
   }
 }

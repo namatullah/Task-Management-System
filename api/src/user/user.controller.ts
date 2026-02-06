@@ -23,6 +23,11 @@ export class UsersController {
     return this.usersService.findAll(query, +page, +ITEMS_PER_PAGE);
   }
 
+  @Patch(':id/change_role')
+  changeRole(@Param('id') id: string, @Body('role') role: string) {
+    return this.usersService.changeRole(id, role);
+  }
+
   //   @Patch(':id/edit')
   //   updateUser(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
   //     return this.usersService.updateUser(id, updateAuthDto);

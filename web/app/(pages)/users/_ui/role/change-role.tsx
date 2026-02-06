@@ -17,7 +17,6 @@ const ChangeRole = ({ user }: { user: any }) => {
   const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedRole(e.target.value);
   };
-  console.log(selectedRole);
   return (
     <>
       <button
@@ -72,14 +71,6 @@ const ChangeRole = ({ user }: { user: any }) => {
                       <span className="text-sm">User</span>
                     </label>
                   </div>
-                  {/* <div id="role-error" aria-live="polite" aria-atomic="true">
-                    {state.errors?.role &&
-                      state.errors.role.map((error: string) => (
-                        <p className="mt-2 text-sm text-red-500" key={error}>
-                          {error}
-                        </p>
-                      ))}
-                  </div> */}
                 </div>
               </div>
 

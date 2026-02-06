@@ -2,9 +2,7 @@ import { list } from "@/app/_lib/users";
 import { PAGINATION } from "@/app/_shared/helper";
 import Pagination from "@/app/_ui/shared/pagination";
 import Search from "../../_ui/shared/search";
-import Update from "./_ui/update";
-import Delete from "./_ui/delete/delete";
-import ChangeRole from "./_ui/changeRole/change-role";
+import ChangeRole from "./_ui/role/change-role";
 
 const UsersTable = async ({ query, page }: { query: string; page: number }) => {
   const { users, total_page } = await list(
