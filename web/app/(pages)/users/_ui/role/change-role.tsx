@@ -4,8 +4,9 @@ import { useActionState, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { changeRoleAction } from "./action";
 import { LoadingButton } from "@/app/_ui/shared/LoadingButton";
+import { UserType } from "@/app/_shared/types";
 
-const ChangeRole = ({ user }: { user: any }) => {
+const ChangeRole = ({ user }: { user: UserType }) => {
   const [open, setOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState(user.role);
 
@@ -24,8 +25,9 @@ const ChangeRole = ({ user }: { user: any }) => {
   return (
     <>
       <button
+        disabled={!user.isActive}
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-4 py-2 border border-blue-200 rounded hover:bg-blue-100 cursor-pointer"
+        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded  cursor-pointer"
       >
         Change Role
       </button>
@@ -79,13 +81,6 @@ const ChangeRole = ({ user }: { user: any }) => {
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                {/* <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Change
-                </button> */}
-
                 <LoadingButton
                   type="submit"
                   isLoading={isPending}

@@ -28,6 +28,12 @@ export class UsersController {
     return this.usersService.changeRole(id, role);
   }
 
+  @Patch(':id/status')
+  changeStatus(@Param('id') id: string) {
+    console.log('here')
+    return this.usersService.changeStatus(id);
+  }
+
   //   @Patch(':id/edit')
   //   updateUser(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
   //     return this.usersService.updateUser(id, updateAuthDto);

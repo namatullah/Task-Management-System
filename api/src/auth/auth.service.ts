@@ -12,7 +12,6 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
-    console.log('signup', signUpDto);
     const hashedPassword = await bcrypt.hash(signUpDto.password, 10);
     const role =
       signUpDto.adminToken === process.env.ADMIN_TOKEN ? 'ADMIN' : 'USER';

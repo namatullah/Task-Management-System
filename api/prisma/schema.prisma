@@ -7,16 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Project {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  ownerId     String?
-  owner       User?    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-}
-
 model User {
   id        String    @id @default(cuid())
   email     String    @unique
@@ -25,5 +15,16 @@ model User {
   role      String    @default("user")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  isActive  Boolean   @default(true)
   projects  Project[]
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ownerId     String?
+  owner       User?    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }

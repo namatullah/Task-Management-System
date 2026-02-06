@@ -15,3 +15,12 @@ export const links = [
   { name: "Users", href: "/users", icon: UserGroupIcon },
   { name: "Logout", href: "logout", icon: ArrowRightOnRectangleIcon },
 ];
+
+export interface UserType {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  isActive?: boolean;
+  createdAt?: string;
+}

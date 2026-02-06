@@ -53,6 +53,12 @@ export default function GlobalToast({
           customMessages?.change_role || `${text} role changed successfully`,
         );
         break;
+      case "change_status":
+        toast.success(
+          customMessages?.change_status ||
+            `${text} status changed successfully`,
+        );
+        break;
       default:
         if (customMessages && customMessages[toastType]) {
           toast.success(customMessages[toastType]);

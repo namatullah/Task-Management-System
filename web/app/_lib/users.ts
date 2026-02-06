@@ -29,11 +29,26 @@ export async function remove(id: string) {
 }
 
 export async function changeRole(id: string, data: any) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}/change_role`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/${id}/change_role`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    },
+  );
   if (!res.ok) throw new Error("Failed to change user role");
+  return res.json();
+}
+
+export async function changeStatus(id: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/${id}/status`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+  if (!res.ok) throw new Error("Failed to change user status");
   return res.json();
 }

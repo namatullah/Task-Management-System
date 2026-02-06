@@ -1,25 +1,18 @@
 "use server";
 
-import { changeRole } from "@/app/_lib/users";
+import { changeStatus } from "@/app/_lib/users";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function changeRoleAction(
-  id: string,
-  prevState: any,
-  formData: FormData,
-) {
-  const role = formData.get("role") as string;
-
+export async function changeStatusAction(id: string, prevState: any) {
   try {
-    await changeRole(id, { role });
+    await changeStatus(id);
   } catch (error) {
-    console.log(error)
     return {
-      message: "Database Error: Failed to change user role.",
+      message: "Database Error: Failed to change user status.",
     };
   }
 
   revalidatePath("/users");
-  redirect("/users?toast=change_role");
+  redirect("/users?toast=change_status");
 }

@@ -49,23 +49,41 @@ export class UserService {
         }
       : undefined;
     const total = await this.prisma.user.count({ where });
-    const total_page = Math.ceil(total / ITEMS_PER_PAGE);
 
     const skip = (page - 1) * ITEMS_PER_PAGE;
     const users = await this.prisma.user.findMany({
       where,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+      },
       take: ITEMS_PER_PAGE,
       skip,
       orderBy: { createdAt: 'desc' },
     });
-    return { users, total_page };
+    return { users, total_users: total };
   }
 
   async changeRole(id: string, role: string) {
-    const user = this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) {
       throw new NotFoundException('User not found');
     }
     return this.prisma.user.update({ where: { id }, data: { role } });
+  }
+
+  async changeStatus(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return this.prisma.user.update({
+      where: { id },
+      data: { isActive: !user.isActive },
+    });
   }
 }
