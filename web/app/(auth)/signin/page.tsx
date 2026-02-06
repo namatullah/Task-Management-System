@@ -43,7 +43,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (shouldRedirect) {
-      router.push("/pages/dashboard");
+      router.push("/dashboard");
     }
   }, [shouldRedirect, router]);
 

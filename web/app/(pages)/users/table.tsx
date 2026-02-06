@@ -4,6 +4,7 @@ import Pagination from "@/app/_ui/shared/pagination";
 import Search from "../../_ui/shared/search";
 import Update from "./_ui/update";
 import Delete from "./_ui/delete/delete";
+import ChangeRole from "./_ui/changeRole/change-role";
 
 const UsersTable = async ({ query, page }: { query: string; page: number }) => {
   const { users, total_page } = await list(
@@ -17,7 +18,7 @@ const UsersTable = async ({ query, page }: { query: string; page: number }) => {
         <thead className="bg-gray-50">
           <tr>
             <th
-              colSpan={3}
+              colSpan={4}
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               <Search placeholder="Search users..." />
@@ -42,23 +43,23 @@ const UsersTable = async ({ query, page }: { query: string; page: number }) => {
         <tbody className="divide-y divide-gray-200">
           {users.map((user: any) => (
             <tr key={user.id} className="hover:bg-gray-100 text-sm">
-              <td className="px-6 py-2 align-top" width="30%">
+              <td className="px-6 py-2 align-top">
                 {user.name}
               </td>
-              <td className="px-6 py-2 align-top" width="40%">
+              <td className="px-6 py-2 align-top">
                 {user.email}
               </td>
-              <td className="px-6 py-2 align-top" width="40%">
+              <td className="px-6 py-2 align-top">
                 {user.role}
               </td>
               <td className="px-6 py-2 flex gap-2 align-top">
-                {/* <Update user={user} /> */}
+                <ChangeRole user={user} />
                 <Delete user={user} />
               </td>
             </tr>
           ))}
           <tr className="hover:bg-gray-100 text-sm">
-            <td className="px-6 py-4 align-top text-center" colSpan={3}>
+            <td className="px-6 py-4 align-top text-center" colSpan={4}>
               <Pagination totalPages={total_page} />
             </td>
           </tr>

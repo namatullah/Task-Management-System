@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { signOutAction } from "../auth/actions";
+import { signOutAction } from "../(auth)/actions";
 interface User {
   id: string;
   email: string;
