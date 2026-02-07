@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { connect } from 'http2';
-import { isNotIn } from 'class-validator';
 
 @Injectable()
 export class MembersService {
@@ -45,7 +43,7 @@ export class MembersService {
     return `This action updates a #${id} member`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} member`;
+  remove(id: string) {
+    return this.prisma.projectUser.delete({ where: { id } });
   }
 }

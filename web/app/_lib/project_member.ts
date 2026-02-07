@@ -1,4 +1,4 @@
-export async function add(data: any) {
+export async function addMember(data: any) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/members`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -18,5 +18,13 @@ export async function getMembers(id: string) {
   );
   if (!res.ok) throw new Error("Failed to fetch members");
 
+  return res.json();
+}
+
+export async function deleteMember(id: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/members/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete member");
   return res.json();
 }

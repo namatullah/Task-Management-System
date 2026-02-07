@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  Dispatch,
-  SetStateAction,
-  useActionState,
-  useEffect,
-  useState,
-} from "react";
-import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Dispatch, SetStateAction, useActionState, useEffect } from "react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { UserType } from "@/app/_shared/types";
 import { LoadingButton } from "@/app/_ui/shared/LoadingButton";
 import { addMemberAction, FormState } from "./action";
@@ -29,10 +23,9 @@ const AddMember = ({
     initialState,
   );
   useEffect(() => {
-    if (state.success && state.message) {
-      toast.success(state.message);
-      setOpen(false);
-    }
+    if (!state.success) return;
+    toast.success(state.message);
+    setOpen(false);
   }, [state]);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">

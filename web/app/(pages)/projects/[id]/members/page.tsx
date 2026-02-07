@@ -1,29 +1,37 @@
 "use client";
 import {
-  InformationCircleIcon,
   PencilSquareIcon,
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import AddMember from "./add/add";
+import AddMember from "./actions/add/add";
 import { ProjectType, UserType } from "@/app/_shared/types";
 import { getMembers } from "@/app/_lib/project_member";
 import { useEffect, useState } from "react";
 import { MemberTableSkeleton } from "@/app/_ui/shared/skeletons";
 import InfoContent from "@/app/_ui/shared/InfoContent";
+import DeleteMember from "./actions/delete/delete";
+import EditMember from "./actions/edit/edit";
 
 const Members = ({ project }: { project: ProjectType }) => {
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [member, setMember] = useState<UserType | null>(null);
+
   const [members, setMembers] = useState<UserType | any>();
   const [users, setUsers] = useState<UserType | any>();
+
   useEffect(() => {
+    if (open || openDelete || openEdit) return;
+
     const fetch = async () => {
       const { availabelUsers, members } = await getMembers(project.id);
       setUsers(availabelUsers);
       setMembers(members);
     };
     fetch();
-  }, []);
+  }, [open, openDelete, openEdit]);
 
   if (!members) {
     return <MemberTableSkeleton />;
@@ -32,6 +40,20 @@ const Members = ({ project }: { project: ProjectType }) => {
     <>
       {open && (
         <AddMember setOpen={setOpen} projectId={project.id} users={users} />
+      )}
+      {openDelete && (
+        <DeleteMember
+          setOpen={setOpenDelete}
+          setMember={setMember}
+          member={member}
+        />
+      )}
+      {openEdit && (
+        <EditMember
+          setOpen={setOpenDelete}
+          projectId={project.id}
+          users={users}
+        />
       )}
       <div className="w-full flex flex-col h-full">
         <div className="overflow-x-auto w-full bg-white rounded shadow">
@@ -60,8 +82,20 @@ const Members = ({ project }: { project: ProjectType }) => {
                           )}
                         </div>
                         <div className="flex gap-3">
-                          <PencilSquareIcon className="w-5 h-5 text-blue-600 cursor-pointer" />
-                          <TrashIcon className="w-5 h-5 text-red-600 cursor-pointer" />
+                          <PencilSquareIcon
+                            className="w-5 h-5 text-blue-600 cursor-pointer"
+                            onClick={() => {
+                              setMember(member);
+                              setOpenEdit(true);
+                            }}
+                          />
+                          <TrashIcon
+                            className="w-5 h-5 text-red-600 cursor-pointer"
+                            onClick={() => {
+                              setMember(member);
+                              setOpenDelete(true);
+                            }}
+                          />
                         </div>
                       </div>
                     </td>

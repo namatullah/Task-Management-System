@@ -1,9 +1,7 @@
 "use server";
 
-import { add } from "@/app/_lib/project_member";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { success, z } from "zod";
+import { addMember } from "@/app/_lib/project_member";
+import { z } from "zod";
 
 const addMemberSchema = z.object({
   userId: z.string().min(1, "Please select a user"),
@@ -19,7 +17,7 @@ export type FormState = {
   success: boolean;
 };
 
-export async function addMemberAction(
+export async function EditMemberAction(
   prevState: FormState,
   formData: FormData,
 ) {
@@ -38,7 +36,7 @@ export async function addMemberAction(
   }
   const { userId, projectId, isAdmin } = validatedFields.data;
   try {
-    await add({ userId, projectId, isAdmin });
+    await addMember({ userId, projectId, isAdmin });
     return {
       message: "New member is added successfully",
       errors: {},
