@@ -57,7 +57,7 @@ export async function getUsers() {
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/all`, {
-    next: { revalidate: 100 },
+    next: { revalidate: 100 }, //0 same as { cache: 'no-store' }
   });
   if (!res.ok) throw new Error("Failed to fetch users");
   return res.json();

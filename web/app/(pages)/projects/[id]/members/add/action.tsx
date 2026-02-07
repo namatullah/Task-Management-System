@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 const addMemberSchema = z.object({
-  user: z.string().min(1, "Please select a user"),
+  userId: z.string().min(1, "Please select a user"),
   isAdmin: z.string().optional(),
   projectId: z.string().optional(),
 });
@@ -14,7 +14,7 @@ const addMemberSchema = z.object({
 export type FormState = {
   message: string | null;
   errors?: {
-    user?: string[];
+    userId?: string[];
   };
 };
 
@@ -23,21 +23,20 @@ export async function addMemberAction(
   formData: FormData,
 ) {
   const rawData = {
-    user: formData.get("user"),
-    isAdmin: formData.get("isAdmin"),
+    userId: formData.get("userId"),
+    isAdmin: formData.get("isAdmin") || "off",
     projectId: formData.get("projectId"),
   };
   const validatedFields = addMemberSchema.safeParse(rawData);
-
   if (!validatedFields.success) {
     return {
       message: "",
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
-  const { user, isAdmin, projectId } = validatedFields.data;
+  const { userId, projectId, isAdmin } = validatedFields.data;
   try {
-    await add({ user, isAdmin, projectId });
+    await add({ userId, projectId, isAdmin });
   } catch (error) {
     console.error("Error adding member:", error);
     return {
@@ -48,5 +47,5 @@ export async function addMemberAction(
   }
 
   revalidatePath(`/projects/${projectId}`);
-  redirect("/projects/${projectId}?toast=created");
+  redirect(`/projects/${projectId}?toast=created`);
 }

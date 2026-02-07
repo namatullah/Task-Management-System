@@ -1,12 +1,15 @@
 import { getById } from "@/app/_lib/projects";
 import Members from "./members/page";
+import GlobalToast from "@/app/_ui/shared/GlobalToast";
 
 const page = async (props: { params: Promise<{ id: string }> }) => {
   const { id } = await props.params;
   const project = await getById(id);
+  console.log("Data: ", project);
 
   return (
     <div className="w-full flex flex-col h-full">
+      {/* <GlobalToast route={`/projects/${id}`} text="project" /> */}
       <div className="overflow-x-auto w-full bg-white rounded shadow">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

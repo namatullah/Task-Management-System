@@ -1,24 +1,20 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { UserType } from "@/app/_shared/types";
-import { getUsers } from "@/app/_lib/users";
 import { LoadingButton } from "@/app/_ui/shared/LoadingButton";
 import { addMemberAction, FormState } from "./action";
 import clsx from "clsx";
 
-const AddMember = ({ projectId }: { projectId: string }) => {
+const AddMember = ({
+  projectId,
+  users,
+}: {
+  projectId: string;
+  users: UserType[];
+}) => {
   const [open, setOpen] = useState(false);
-  const [users, setUsers] = useState<UserType[] | null>(null);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const res = await getUsers();
-      setUsers(res);
-    };
-    fetchUsers();
-  }, []);
 
   const initialState: FormState = { message: null, errors: {} };
   const [state, formAction, isPending] = useActionState(
@@ -53,10 +49,10 @@ const AddMember = ({ projectId }: { projectId: string }) => {
                   select users
                 </label>
                 <select
-                  name="user"
+                  name="userId"
                   className={clsx(
                     "w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none bg-white appearance-none",
-                    state.errors?.user
+                    state.errors?.userId
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-300 focus:ring-blue-500",
                   )}
@@ -68,12 +64,12 @@ const AddMember = ({ projectId }: { projectId: string }) => {
                     </option>
                   ))}
                 </select>
-                {state.errors?.user && (
+                {state.errors?.userId && (
                   <div
                     id="password-error"
                     className="mt-1 text-xs text-red-500"
                   >
-                    {state.errors.user.map((error, index) => (
+                    {state.errors.userId.map((error, index) => (
                       <p key={index}>{error}</p>
                     ))}
                   </div>
@@ -84,7 +80,6 @@ const AddMember = ({ projectId }: { projectId: string }) => {
                 <input
                   name="isAdmin"
                   type="checkbox"
-                  value="on"
                   className="w-4 h-4 border border-gray-400 rounded focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
                 />
                 <label htmlFor="is-admin" className="text-sm font-medium">
