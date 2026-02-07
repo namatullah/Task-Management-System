@@ -1,15 +1,12 @@
 import { getById } from "@/app/_lib/projects";
 import Members from "./members/page";
-import GlobalToast from "@/app/_ui/shared/GlobalToast";
 
 const page = async (props: { params: Promise<{ id: string }> }) => {
   const { id } = await props.params;
   const project = await getById(id);
-  console.log("Data: ", project);
 
   return (
     <div className="w-full flex flex-col h-full">
-      {/* <GlobalToast route={`/projects/${id}`} text="project" /> */}
       <div className="overflow-x-auto w-full bg-white rounded shadow">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -27,14 +24,13 @@ const page = async (props: { params: Promise<{ id: string }> }) => {
           </thead>
 
           <tbody className="divide-y divide-gray-200">
-            <tr className="hover:bg-gray-100 text-sm">
-              <td className="px-6 py-4 whitespace-nowrap">
-                Project Name: {project.name}
-                <br />
-                Project description: {project.description}
+            <tr className="hover:bg-gray-100">
+              <td className="px-6 py-4 whitespace-nowrap align-top" width="30%">
+                <p className="text-xl">{project.name}</p>
+                <p className="text-wrap text-sm">{project.description}</p>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap"></td>
-              <td className="px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 whitespace-nowrap" width="30%"></td>
+              <td className="px-6 py-4 whitespace-nowrap" width="30%">
                 <Members project={project} />
               </td>
             </tr>

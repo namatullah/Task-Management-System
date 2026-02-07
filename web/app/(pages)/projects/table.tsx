@@ -6,6 +6,7 @@ import Search from "../../_ui/shared/search";
 import Pagination from "@/app/_ui/shared/pagination";
 import { PAGINATION } from "@/app/_shared/helper";
 import Link from "next/link";
+import { EyeDropperIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 const Table = async ({ query, page }: { query: string; page: number }) => {
   const { projects, total_page } = await list(
@@ -48,7 +49,12 @@ const Table = async ({ query, page }: { query: string; page: number }) => {
                 {project.description}
               </td>
               <td className="px-6 py-2 flex gap-2 align-top">
-                <Link href={`/projects/${project.id}`}>view</Link>
+                <Link
+                  href={`/projects/${project.id}`}
+                  className="flex items-center gap-2 px-4 py-2 border border-blue-200 rounded hover:bg-blue-100 cursor-pointer"
+                >
+                  <EyeIcon className="w-5 h-5 text-blue-600" />
+                </Link>
 
                 <Update project={project} />
                 <Delete project={project} />
