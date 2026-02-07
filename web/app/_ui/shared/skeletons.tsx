@@ -1,9 +1,15 @@
 const ActionSkeleton = () => {
   return <div className="h-9 w-13 bg-gray-200 rounded"></div>;
 };
-
+const SmallActionSkeleton = () => {
+  return <div className="h-4 w-6 bg-gray-200 rounded"></div>;
+};
 const SearchSkeleton = () => {
   return <div className="h-8 max-w-4/12 bg-gray-300 rounded"></div>;
+};
+
+const TextSkeleton = () => {
+  return <div className="h-4 w-24 bg-gray-300 rounded"></div>;
 };
 
 export const ProjectTableSkeleton = () => {
@@ -104,6 +110,43 @@ export const UsersTableSkeleton = () => {
           ))}
         </tbody>
       </table>
+    </div>
+  );
+};
+
+export const MemberTableSkeleton = () => {
+  const rows = Array.from({ length: 3 });
+  return (
+    <div className="w-full flex flex-col h-full">
+      <div className="overflow-x-auto w-full bg-white rounded shadow">
+        <table className="min-w-full divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200 text-sm">
+            <tr className="hover:bg-gray-100">
+              <td className="px-6 py-4 whitespace-nowrap ">
+                <div className="flex justify-between">
+                  <TextSkeleton />
+                  <SmallActionSkeleton />
+                </div>
+              </td>
+            </tr>
+            {rows.map((_, i) => (
+              <tr className="hover:bg-gray-100" key={i}>
+                <td className="px-6 py-4 whitespace-nowrap ">
+                  <div className="flex justify-between">
+                    <div className="flex gap-2">
+                      <TextSkeleton />
+                    </div>
+                    <div className="flex gap-3">
+                      <SmallActionSkeleton />
+                      <SmallActionSkeleton />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

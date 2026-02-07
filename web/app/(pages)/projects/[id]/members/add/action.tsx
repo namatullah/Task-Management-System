@@ -3,7 +3,7 @@
 import { add } from "@/app/_lib/project_member";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import { success, z } from "zod";
 
 const addMemberSchema = z.object({
   userId: z.string().min(1, "Please select a user"),
@@ -16,6 +16,7 @@ export type FormState = {
   errors?: {
     userId?: string[];
   };
+  success: boolean;
 };
 
 export async function addMemberAction(
@@ -32,20 +33,24 @@ export async function addMemberAction(
     return {
       message: "",
       errors: validatedFields.error.flatten().fieldErrors,
+      success: false,
     };
   }
   const { userId, projectId, isAdmin } = validatedFields.data;
   try {
     await add({ userId, projectId, isAdmin });
+    return {
+      message: "New member is added successfully",
+      errors: {},
+      success: true,
+    };
   } catch (error) {
     console.error("Error adding member:", error);
     return {
       message:
         error instanceof Error ? error.message : "An unexpected error occurred",
       errors: {},
+      success: false,
     };
   }
-
-  revalidatePath(`/projects/${projectId}`);
-  redirect(`/projects/${projectId}?toast=created`);
 }
