@@ -2,14 +2,19 @@
 
 import { useActionState, useState } from "react";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { createProject, State } from "../actions";
+import { createProject, State } from "./actions";
+import { useAuth } from "@/app/context/AuthContext";
+import { LoadingButton } from "@/app/_ui/shared/LoadingButton";
 
 export default function Create() {
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createProject, initialState);
-
+  const [state, formAction, isPending] = useActionState(
+    createProject,
+    initialState,
+  );
   return (
     <>
       <button
@@ -25,11 +30,18 @@ export default function Create() {
           <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Create Project</h3>
-              <button onClick={() => setOpen(false)}>
-                <XMarkIcon className="w-5 h-5 text-red-500" />
+              <button
+                onClick={() => {
+                  state.errors = {};
+                  state.message = null;
+                  setOpen(false);
+                }}
+              >
+                <XMarkIcon className="w-5 h-5 text-red-500 cursor-pointer" />
               </button>
             </div>
             <form action={formAction} className="space-y-4">
+              <input type="hidden" name="ownerId" value={user?.id} />
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Project name
@@ -80,12 +92,13 @@ export default function Create() {
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <button
+                <LoadingButton
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  isLoading={isPending}
+                  loadingText="Creating..."
                 >
                   Create
-                </button>
+                </LoadingButton>
               </div>
             </form>
           </div>

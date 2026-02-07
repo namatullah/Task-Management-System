@@ -2,8 +2,8 @@ import { list } from "@/app/_lib/users";
 import { PAGINATION } from "@/app/_shared/helper";
 import Pagination from "@/app/_ui/shared/pagination";
 import Search from "../../../_ui/shared/search";
-import ChangeRole from "../_ui/role/change-role";
-import ChangeStatus from "../_ui/status/change-status";
+import ChangeRole from "../actions/role/change-role";
+import ChangeStatus from "../actions/status/change-status";
 import Content from "./content";
 
 const UsersTable = async ({ query, page }: { query: string; page: number }) => {

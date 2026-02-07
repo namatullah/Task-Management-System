@@ -16,24 +16,25 @@ const FormSchema = z.object({
   id: z.string(),
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
+  ownerId: z.string().optional(),
 });
-
 const CreateProject = FormSchema.omit({ id: true });
 
 export async function createProject(prevState: State, formData: FormData) {
   const validatedFields = CreateProject.safeParse({
     name: formData.get("name"),
     description: formData.get("description"),
+    ownerId: formData.get("ownerId"),
   });
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to create  projects",
+      message: "",
     };
   }
-  const { name, description } = validatedFields.data;
+  const { name, description, ownerId } = validatedFields.data;
   try {
-    await create({ name, description });
+    await create({ name, description, ownerId });
   } catch (error) {
     return {
       message: "Database Error: Failed to Create Projects.",
@@ -44,7 +45,7 @@ export async function createProject(prevState: State, formData: FormData) {
   redirect("/projects?toast=created");
 }
 
-const UpdateProject = FormSchema.omit({ id: true });
+const UpdateProject = FormSchema.omit({ id: true, ownerId: true });
 export async function updateProject(
   id: string,
   prevState: State,
@@ -57,7 +58,7 @@ export async function updateProject(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to update  projects",
+      message: "",
     };
   }
   const { name, description } = validatedFields.data;
@@ -73,7 +74,7 @@ export async function updateProject(
   redirect("/projects?toast=updated");
 }
 
-export async function deleteProject(id: string, prevState: State) {
+export async function deleteProject(id: string) {
   try {
     await remove(id);
   } catch (error) {
