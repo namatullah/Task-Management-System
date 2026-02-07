@@ -12,15 +12,18 @@ export async function list(
     page: page.toString(),
     ITEMS_PER_PAGE: ITEMS_PER_PAGE.toString(),
   });
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects?${params.toString()}`, {
-    next: { revalidate: 100 },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/projects?${params.toString()}`,
+    {
+      next: { revalidate: 100 },
+    },
+  );
   if (!res.ok) throw new Error("Failed to fetch projects");
   return res.json();
 }
 
 export async function create(data: any) {
-  const res = await fetch(`${API_URL}/projects`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -28,7 +31,7 @@ export async function create(data: any) {
   return res.json();
 }
 export async function edit(id: string, data: any) {
-  const res = await fetch(`${API_URL}/projects/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -37,14 +40,14 @@ export async function edit(id: string, data: any) {
   return res.json();
 }
 export async function getById(id: string) {
-  const res = await fetch(`${API_URL}/projects/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`, {
     method: "GET",
   });
   if (!res.ok) throw new Error("Failed to Fetch project");
   return res.json();
 }
 export async function remove(id: string) {
-  const res = await fetch(`${API_URL}/projects/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`, {
     method: "DELETE",
   });
   if (!res.ok) throw new Error("Failed to delete project");

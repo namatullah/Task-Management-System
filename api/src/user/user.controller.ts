@@ -23,6 +23,11 @@ export class UsersController {
     return this.usersService.findAll(query, +page, +ITEMS_PER_PAGE);
   }
 
+  @Get('all')
+  all() {
+    return this.usersService.getUsers();
+  }
+
   @Patch(':id/change_role')
   changeRole(@Param('id') id: string, @Body('role') role: string) {
     return this.usersService.changeRole(id, role);
@@ -30,7 +35,6 @@ export class UsersController {
 
   @Patch(':id/status')
   changeStatus(@Param('id') id: string) {
-    console.log('here')
     return this.usersService.changeStatus(id);
   }
 

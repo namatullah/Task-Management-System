@@ -24,3 +24,10 @@ export interface UserType {
   isActive?: boolean;
   createdAt?: string;
 }
+
+export interface ProjectType {
+  id: string;
+  name: string;
+  description: string;
+  createdAt?: string;
+}

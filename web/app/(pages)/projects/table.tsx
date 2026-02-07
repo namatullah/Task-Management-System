@@ -5,6 +5,7 @@ import Delete from "./_ui/delete";
 import Search from "../../_ui/shared/search";
 import Pagination from "@/app/_ui/shared/pagination";
 import { PAGINATION } from "@/app/_shared/helper";
+import Link from "next/link";
 
 const Table = async ({ query, page }: { query: string; page: number }) => {
   const { projects, total_page } = await list(
@@ -47,6 +48,8 @@ const Table = async ({ query, page }: { query: string; page: number }) => {
                 {project.description}
               </td>
               <td className="px-6 py-2 flex gap-2 align-top">
+                <Link href={`/projects/${project.id}`}>view</Link>
+
                 <Update project={project} />
                 <Delete project={project} />
               </td>

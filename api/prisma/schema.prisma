@@ -8,23 +8,34 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  password  String
-  name      String?
-  role      String    @default("user")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  isActive  Boolean   @default(true)
-  projects  Project[]
+  id           String        @id @default(uuid())
+  email        String        @unique
+  password     String
+  name         String?
+  role         String        @default("user")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  isActive     Boolean       @default(true)
+  projects     Project[]
+  projectUsers ProjectUser[]
 }
 
 model Project {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  ownerId     String?
-  owner       User?    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  id           String        @id @default(uuid())
+  name         String
+  description  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  ownerId      String?
+  owner        User?         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  projectUsers ProjectUser[]
+}
+
+model ProjectUser {
+  id        String  @id @default(uuid())
+  projectId String
+  userId    String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isAdmin   Boolean @default(false)
 }

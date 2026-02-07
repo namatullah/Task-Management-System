@@ -34,15 +34,19 @@ export class ProjectsService {
     return { projects, total_page };
   }
 
-  findOne(id: string) {
-    return this.prisma.project.findUnique({ where: { id } });
+  async findOne(id: string) {
+    return await this.prisma.project.findUnique({ where: { id } });
   }
 
-  update(id: string, data: UpdateProjectDto) {
-    return this.prisma.project.update({ where: { id }, data });
+  async update(id: string, data: UpdateProjectDto) {
+    return await this.prisma.project.update({ where: { id }, data });
   }
 
-  remove(id: string) {
-    return this.prisma.project.delete({ where: { id } });
+  async remove(id: string) {
+    return await this.prisma.project.delete({ where: { id } });
+  }
+
+  async getMembers() {
+    return await this.prisma.project.findMany();
   }
 }

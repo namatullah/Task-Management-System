@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/app/context/AuthContext";
-import ChangeRole from "../_ui/role/change-role";
-import ChangeStatus from "../_ui/status/change-status";
+import ChangeRole from "../actions/role/change-role";
+import ChangeStatus from "../actions/status/change-status";
 import { UserType } from "@/app/_shared/types";
 
 interface PropsType {

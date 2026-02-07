@@ -68,6 +68,13 @@ export class UserService {
     return { users, total_users: total };
   }
 
+  async getUsers() {
+    return await this.prisma.user.findMany({
+      where: { isActive: true },
+      select: { id: true, name: true, email: true, role: true, isActive: true },
+    });
+  }
+
   async changeRole(id: string, role: string) {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) {
