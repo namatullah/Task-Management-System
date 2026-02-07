@@ -27,7 +27,7 @@ const Delete = ({ project }: { project: any }) => {
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">Delete Project</h3>
               <button
                 onClick={() => {
@@ -38,6 +38,7 @@ const Delete = ({ project }: { project: any }) => {
                 <XMarkIcon className="w-5 h-5 text-red-500 cursor-pointer" />
               </button>
             </div>
+            <hr className="text-blue-100 my-4" />
             <form action={formAction} className="space-y-4">
               <p>
                 Are you sure, you want to delete the project{" "}
