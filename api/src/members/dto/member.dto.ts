@@ -13,5 +13,5 @@ export class CreateMemberDto {
 
 export class UpdateMemberDto {
   @IsBoolean()
-  isAdmin: string;
+  isAdmin?: string;
 }

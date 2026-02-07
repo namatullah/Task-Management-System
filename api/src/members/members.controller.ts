@@ -34,6 +34,11 @@ export class MembersController {
   update(@Param('id') id: string, @Body() updateMemberDto: UpdateMemberDto) {
     return this.membersService.update(id, updateMemberDto);
   }
+  
+  @Patch(':id/status')
+  status(@Param('id') id: string) {
+    return this.membersService.changeStatus(id);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

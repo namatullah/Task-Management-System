@@ -1,27 +1,24 @@
 "use server";
 
-import { editMember } from "@/app/_lib/project_member";
+import { changeStatusMember } from "@/app/_lib/project_member";
 
 export type FormState = {
   message: string | null;
   success: boolean;
 };
 
-export async function editMemberAction(
+export async function changeStatusMemberAction(
   id: string,
   prevState: FormState,
-  formData: FormData,
 ) {
-  const isAdmin = (formData.get("isAdmin") as string) || "off";
-  console.log(isAdmin);
   try {
-    await editMember(id, { isAdmin });
+    await changeStatusMember(id);
     return {
-      message: "member is edited successfully",
+      message: "Member status changed successfully",
       success: true,
     };
   } catch (error) {
-    console.error("Error adding member:", error);
+    console.error("Error changing status:", error);
     return {
       message:
         error instanceof Error ? error.message : "An unexpected error occurred",

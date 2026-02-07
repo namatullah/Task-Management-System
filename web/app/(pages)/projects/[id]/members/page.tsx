@@ -1,5 +1,6 @@
 "use client";
 import {
+  CheckIcon,
   PencilSquareIcon,
   PlusIcon,
   TrashIcon,
@@ -12,18 +13,21 @@ import { MemberTableSkeleton } from "@/app/_ui/shared/skeletons";
 import InfoContent from "@/app/_ui/shared/InfoContent";
 import DeleteMember from "./actions/delete/delete";
 import EditMember from "./actions/edit/edit";
+import ChangeStatus from "./actions/status/status";
+import clsx from "clsx";
 
 const Members = ({ project }: { project: ProjectType }) => {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openStatus, setOpenStatus] = useState(false);
   const [member, setMember] = useState<UserType | null>(null);
 
   const [members, setMembers] = useState<UserType | any>();
   const [users, setUsers] = useState<UserType | any>();
 
   useEffect(() => {
-    if (open || openDelete || openEdit) return;
+    if (open || openDelete || openEdit || openStatus) return;
 
     const fetch = async () => {
       const { availabelUsers, members } = await getMembers(project.id);
@@ -31,7 +35,7 @@ const Members = ({ project }: { project: ProjectType }) => {
       setMembers(members);
     };
     fetch();
-  }, [open, openDelete, openEdit]);
+  }, [open, openDelete, openEdit, openStatus]);
 
   if (!members) {
     return <MemberTableSkeleton />;
@@ -51,6 +55,14 @@ const Members = ({ project }: { project: ProjectType }) => {
       {openEdit && (
         <EditMember
           setOpen={setOpenEdit}
+          setMember={setMember}
+          member={member}
+        />
+      )}
+
+      {openStatus && (
+        <ChangeStatus
+          setOpen={setOpenStatus}
           setMember={setMember}
           member={member}
         />
@@ -82,20 +94,36 @@ const Members = ({ project }: { project: ProjectType }) => {
                           )}
                         </div>
                         <div className="flex gap-3">
-                          <PencilSquareIcon
-                            className="w-5 h-5 text-blue-600 cursor-pointer"
+                          {member.isActive && (
+                            <PencilSquareIcon
+                              className="w-5 h-5 text-blue-600 cursor-pointer"
+                              onClick={() => {
+                                setMember(member);
+                                setOpenEdit(true);
+                              }}
+                            />
+                          )}
+                          <CheckIcon
+                            className={clsx(
+                              "w-5 h-5 cursor-pointer",
+                              member.isActive
+                                ? "text-purple-600"
+                                : "text-gray-200",
+                            )}
                             onClick={() => {
                               setMember(member);
-                              setOpenEdit(true);
+                              setOpenStatus(true);
                             }}
                           />
-                          <TrashIcon
-                            className="w-5 h-5 text-red-600 cursor-pointer"
-                            onClick={() => {
-                              setMember(member);
-                              setOpenDelete(true);
-                            }}
-                          />
+                          {member.isActive && (
+                            <TrashIcon
+                              className="w-5 h-5 text-red-600 cursor-pointer"
+                              onClick={() => {
+                                setMember(member);
+                                setOpenDelete(true);
+                              }}
+                            />
+                          )}
                         </div>
                       </div>
                     </td>

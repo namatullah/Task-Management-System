@@ -31,6 +31,15 @@ export async function editMember(id: string, data: { isAdmin: string }) {
   return res.json();
 }
 
+export async function changeStatusMember(id: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/members/${id}/status`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) throw new Error("Failed to change status");
+  return res.json();
+}
+
 export async function deleteMember(id: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/members/${id}`, {
     method: "DELETE",

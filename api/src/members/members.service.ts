@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMemberDto, UpdateMemberDto } from './dto/member.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -38,14 +38,25 @@ export class MembersService {
     return `This action returns a #${id} member`;
   }
 
-  update(id: string, updateMemberDto: UpdateMemberDto) {
-    return this.prisma.projectUser.update({
+  async update(id: string, updateMemberDto: UpdateMemberDto) {
+    return await this.prisma.projectUser.update({
       where: { id },
       data: { isAdmin: updateMemberDto.isAdmin === 'on' },
     });
   }
 
-  remove(id: string) {
-    return this.prisma.projectUser.delete({ where: { id } });
+  async changeStatus(id: string) {
+    const projectUser = await this.prisma.projectUser.findUnique({
+      where: { id },
+    });
+    if (!projectUser) throw new NotFoundException('Data not found');
+    return await this.prisma.projectUser.update({
+      where: { id },
+      data: { isActive: !projectUser.isActive },
+    });
+  }
+
+  async remove(id: string) {
+    return await this.prisma.projectUser.delete({ where: { id } });
   }
 }
