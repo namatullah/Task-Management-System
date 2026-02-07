@@ -9,8 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { MembersService } from './members.service';
-import { CreateMemberDto } from './dto/create-member.dto';
-import { UpdateMemberDto } from './dto/update-member.dto';
+import { CreateMemberDto, UpdateMemberDto } from './dto/member.dto';
 
 @Controller('members')
 export class MembersController {
@@ -33,7 +32,7 @@ export class MembersController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMemberDto: UpdateMemberDto) {
-    return this.membersService.update(+id, updateMemberDto);
+    return this.membersService.update(id, updateMemberDto);
   }
 
   @Delete(':id')

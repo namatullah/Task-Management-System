@@ -1,45 +1,23 @@
 "use server";
 
-import { addMember } from "@/app/_lib/project_member";
-import { z } from "zod";
-
-const addMemberSchema = z.object({
-  userId: z.string().min(1, "Please select a user"),
-  isAdmin: z.string().optional(),
-  projectId: z.string().optional(),
-});
+import { editMember } from "@/app/_lib/project_member";
 
 export type FormState = {
   message: string | null;
-  errors?: {
-    userId?: string[];
-  };
   success: boolean;
 };
 
-export async function EditMemberAction(
+export async function editMemberAction(
+  id: string,
   prevState: FormState,
   formData: FormData,
 ) {
-  const rawData = {
-    userId: formData.get("userId"),
-    isAdmin: formData.get("isAdmin") || "off",
-    projectId: formData.get("projectId"),
-  };
-  const validatedFields = addMemberSchema.safeParse(rawData);
-  if (!validatedFields.success) {
-    return {
-      message: "",
-      errors: validatedFields.error.flatten().fieldErrors,
-      success: false,
-    };
-  }
-  const { userId, projectId, isAdmin } = validatedFields.data;
+  const isAdmin = (formData.get("isAdmin") as string) || "off";
+  console.log(isAdmin);
   try {
-    await addMember({ userId, projectId, isAdmin });
+    await editMember(id, { isAdmin });
     return {
-      message: "New member is added successfully",
-      errors: {},
+      message: "New member is edited successfully",
       success: true,
     };
   } catch (error) {
@@ -47,7 +25,6 @@ export async function EditMemberAction(
     return {
       message:
         error instanceof Error ? error.message : "An unexpected error occurred",
-      errors: {},
       success: false,
     };
   }

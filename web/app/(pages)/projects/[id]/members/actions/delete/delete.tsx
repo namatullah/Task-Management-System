@@ -21,6 +21,9 @@ const DeleteMember = ({ setOpen, setMember, member }: PropsType) => {
   useEffect(() => {
     if (!state.success) return;
     toast.success(state.message);
+    state.message = null;
+    state.success = false;
+    setMember(null);
     setOpen(false);
   }, [state]);
   return (
@@ -31,6 +34,7 @@ const DeleteMember = ({ setOpen, setMember, member }: PropsType) => {
           <button
             onClick={() => {
               state.message = null;
+              state.success = false;
               setMember(null);
               setOpen(false);
             }}

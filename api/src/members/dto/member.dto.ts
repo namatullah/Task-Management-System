@@ -10,3 +10,8 @@ export class CreateMemberDto {
   @IsBoolean()
   isAdmin: string;
 }
+
+export class UpdateMemberDto {
+  @IsBoolean()
+  isAdmin: string;
+}

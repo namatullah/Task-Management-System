@@ -50,9 +50,9 @@ const Members = ({ project }: { project: ProjectType }) => {
       )}
       {openEdit && (
         <EditMember
-          setOpen={setOpenDelete}
-          projectId={project.id}
-          users={users}
+          setOpen={setOpenEdit}
+          setMember={setMember}
+          member={member}
         />
       )}
       <div className="w-full flex flex-col h-full">

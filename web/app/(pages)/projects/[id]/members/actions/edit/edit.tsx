@@ -1,38 +1,55 @@
 "use client";
 
-import { Dispatch, SetStateAction, useActionState, useEffect } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useActionState,
+  useEffect,
+  useState,
+} from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { UserType } from "@/app/_shared/types";
 import { LoadingButton } from "@/app/_ui/shared/LoadingButton";
-import { addMemberAction, FormState } from "./action";
-import clsx from "clsx";
 import { toast } from "sonner";
+import { editMemberAction, FormState } from "./action";
 
 const EditMember = ({
   setOpen,
-  projectId,
-  users,
+  setMember,
+  member,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
-  projectId: string;
-  users: UserType[];
+  setMember: Dispatch<SetStateAction<UserType | null>>;
+  member: UserType | any;
 }) => {
-  const initialState: FormState = { message: null, errors: {}, success: false };
+  const [check, setCheck] = useState(member.isAdmin);
+  const initialState: FormState = { message: null, success: false };
+  const updateMemberWithId = editMemberAction.bind(null, member?.id);
   const [state, formAction, isPending] = useActionState(
-    addMemberAction,
+    updateMemberWithId,
     initialState,
   );
   useEffect(() => {
     if (!state.success) return;
     toast.success(state.message);
+    state.message = null;
+    state.success = false;
+    setMember(null);
     setOpen(false);
   }, [state]);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Add Member</h3>
-          <button onClick={() => setOpen(false)}>
+          <h3 className="text-lg font-semibold">Edit Member</h3>
+          <button
+            onClick={() => {
+              state.message = null;
+              state.success = false;
+              setMember(null);
+              setOpen(false);
+            }}
+          >
             <XMarkIcon className="w-5 h-5 text-red-500 cursor-pointer" />
           </button>
         </div>
@@ -42,41 +59,13 @@ const EditMember = ({
               <p className="mt-2 text-sm text-red-500">{state.message}</p>
             )}
           </div>
-          <input type="hidden" name="projectId" value={projectId} />
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              select users
-            </label>
-            <select
-              name="userId"
-              className={clsx(
-                "w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none bg-white appearance-none",
-                state.errors?.userId
-                  ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500",
-              )}
-            >
-              <option value="">Select a user</option>
-              {users?.map((usr: UserType) => (
-                <option key={usr.id} value={usr.id}>
-                  {usr.name}
-                </option>
-              ))}
-            </select>
-            {state.errors?.userId && (
-              <div id="password-error" className="mt-1 text-xs text-red-500">
-                {state.errors.userId.map((error, index) => (
-                  <p key={index}>{error}</p>
-                ))}
-              </div>
-            )}
-          </div>
-
           <div className="flex items-center gap-2">
             <input
               name="isAdmin"
               type="checkbox"
-              className="w-4 h-4 border border-gray-400 rounded focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
+              checked={check}
+              onChange={(e) => setCheck(e.target.checked)}
+              className="w-4 h-4 border border-gray-400 rounded focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none cursor-pointer"
             />
             <label htmlFor="is-admin" className="text-sm font-medium">
               Project admin?

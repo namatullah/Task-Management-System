@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMemberDto } from './dto/create-member.dto';
-import { UpdateMemberDto } from './dto/update-member.dto';
+import { CreateMemberDto, UpdateMemberDto } from './dto/member.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -39,8 +38,11 @@ export class MembersService {
     return `This action returns a #${id} member`;
   }
 
-  update(id: number, updateMemberDto: UpdateMemberDto) {
-    return `This action updates a #${id} member`;
+  update(id: string, updateMemberDto: UpdateMemberDto) {
+    return this.prisma.projectUser.update({
+      where: { id },
+      data: { isAdmin: updateMemberDto.isAdmin === 'on' },
+    });
   }
 
   remove(id: string) {
