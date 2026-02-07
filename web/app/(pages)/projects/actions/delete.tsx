@@ -2,14 +2,18 @@
 
 import { useActionState, useState } from "react";
 import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { deleteProject, State } from "../actions";
+import { deleteProject } from "./actions";
+import { LoadingButton } from "@/app/_ui/shared/LoadingButton";
 
 const Delete = ({ project }: { project: any }) => {
   const [open, setOpen] = useState(false);
 
-  const initialState: State = { message: null, errors: {} };
+  const initialState: any = { message: null };
   const updateProjectWithId = deleteProject.bind(null, project.id);
-  const [state, formAction] = useActionState(updateProjectWithId, initialState);
+  const [state, formAction, isPending] = useActionState(
+    updateProjectWithId,
+    initialState,
+  );
 
   return (
     <>
@@ -23,12 +27,18 @@ const Delete = ({ project }: { project: any }) => {
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">Delete Project</h3>
-              <button onClick={() => setOpen(false)}>
-                <XMarkIcon className="w-5 h-5 text-red-500" />
+              <button
+                onClick={() => {
+                  state.message = null;
+                  setOpen(false);
+                }}
+              >
+                <XMarkIcon className="w-5 h-5 text-red-500 cursor-pointer" />
               </button>
             </div>
+            <hr className="text-blue-100 my-4" />
             <form action={formAction} className="space-y-4">
               <p>
                 Are you sure, you want to delete the project{" "}
@@ -43,17 +53,21 @@ const Delete = ({ project }: { project: any }) => {
               <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
-                  onClick={() => setOpen(false)}
-                  className="px-4 py-2 border rounded hover:bg-gray-100"
+                  onClick={() => {
+                    state.message = null;
+                    setOpen(false);
+                  }}
+                  className="px-4 py-2 border rounded hover:bg-gray-100 cursor-pointer"
                 >
                   No
                 </button>
-                <button
+                <LoadingButton
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  isLoading={isPending}
+                  loadingText="Deleting..."
                 >
                   Yes
-                </button>
+                </LoadingButton>
               </div>
             </form>
           </div>

@@ -1,7 +1,7 @@
 "use server";
 import { list } from "@/app/_lib/projects";
-import Update from "./_ui/update";
-import Delete from "./_ui/delete";
+import Update from "./actions/update";
+import Delete from "./actions/delete";
 import Search from "../../_ui/shared/search";
 import Pagination from "@/app/_ui/shared/pagination";
 import { PAGINATION } from "@/app/_shared/helper";

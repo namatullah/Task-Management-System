@@ -34,14 +34,14 @@ const ChangeStatus = ({ user }: { user: UserType }) => {
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">Change User Status</h3>
               <button onClick={() => setOpen(false)}>
                 <XMarkIcon className="w-5 h-5 text-red-500" />
               </button>
             </div>
-            <hr />
-            <form action={formAction} className="space-y-4 mt-4">
+            <hr className="text-blue-100 my-4" />
+            <form action={formAction} className="space-y-4">
               <p className={user.isActive ? "text-red-500" : "text-green-500"}>
                 {user.isActive
                   ? `Are you sure to deactive the user: ${user.name}`

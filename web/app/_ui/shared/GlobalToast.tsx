@@ -31,7 +31,6 @@ export default function GlobalToast({
 
     hasShownRef.current = true;
 
-    // Use custom message if provided, otherwise use default
     switch (toastType) {
       case "created":
         toast.success(

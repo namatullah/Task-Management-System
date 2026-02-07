@@ -1,14 +1,22 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { createProject, State } from "../actions";
+import { PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { State, updateProject } from "./actions";
+import { LoadingButton } from "@/app/_ui/shared/LoadingButton";
+import { stat } from "fs";
 
-export default function Create() {
+export default function Update({ project }: { project: any }) {
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState(project.name);
+  const [description, setDescription] = useState(project.description);
+
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createProject, initialState);
+  const updateProjectWithId = updateProject.bind(null, project.id);
+  const [state, formAction, isPending] = useActionState(
+    updateProjectWithId,
+    initialState,
+  );
 
   return (
     <>
@@ -16,19 +24,25 @@ export default function Create() {
         onClick={() => setOpen(true)}
         className="flex items-center gap-2 px-4 py-2 border border-blue-200 rounded hover:bg-blue-100 cursor-pointer"
       >
-        <PlusIcon className="w-5 h-5 text-blue-600" />
-        Add Project
+        <PencilIcon className="w-5 h-5 text-blue-600" />
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Create Project</h3>
-              <button onClick={() => setOpen(false)}>
-                <XMarkIcon className="w-5 h-5 text-red-500" />
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Update Project</h3>
+              <button
+                onClick={() => {
+                  state.errors = {};
+                  state.message = null;
+                  setOpen(false);
+                }}
+              >
+                <XMarkIcon className="w-5 h-5 text-red-500 cursor-pointer" />
               </button>
             </div>
+            <hr className="text-blue-100 my-4" />
             <form action={formAction} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
@@ -36,6 +50,8 @@ export default function Create() {
                 </label>
                 <input
                   name="name"
+                  value={name}
+                  onChange={({ target }) => setName(target.value)}
                   className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
                   aria-describedby="name-error"
                 />
@@ -56,6 +72,8 @@ export default function Create() {
                 <textarea
                   name="description"
                   rows={3}
+                  value={description}
+                  onChange={({ target }) => setDescription(target.value)}
                   className="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-none"
                   aria-describedby="description-error"
                 />
@@ -72,20 +90,19 @@ export default function Create() {
                     ))}
                 </div>
               </div>
-
               <div aria-live="polite" aria-atomic="true">
                 {state.message && (
                   <p className="mt-2 text-sm text-red-500">{state.message}</p>
                 )}
               </div>
-
               <div className="flex justify-end gap-2 pt-2">
-                <button
+                <LoadingButton
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  isLoading={isPending}
+                  loadingText="Updating..."
                 >
-                  Create
-                </button>
+                  Update
+                </LoadingButton>
               </div>
             </form>
           </div>
