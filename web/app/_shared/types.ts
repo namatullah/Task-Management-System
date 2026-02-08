@@ -31,3 +31,32 @@ export interface ProjectType {
   description: string;
   createdAt?: string;
 }
+
+export type ProjectStatus =
+  | "Planned"
+  | "In progress"
+  | "In testing"
+  | "On hold"
+  | "Ready to release"
+  | "Complete"
+  | "Canceled";
+
+export const STATUS_FLOW = [
+  "Planned",
+  "In progress",
+  "In testing",
+  "On hold",
+  "Ready to release",
+  "Complete",
+  "Canceled",
+];
+
+export const STATUS_TRANSITIONS: Record<ProjectStatus, ProjectStatus[]> = {
+  Planned: ["Canceled"],
+  "In progress": ["On hold", "Canceled"],
+  "In testing": ["On hold", "Canceled"],
+  "On hold": ["In progress", "In testing", "Canceled"],
+  "Ready to release": ["Complete", "In testing", "Canceled"],
+  Complete: [], // Final state
+  Canceled: [], // Final state
+};

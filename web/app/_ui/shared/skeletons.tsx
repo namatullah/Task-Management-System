@@ -8,8 +8,8 @@ const SearchSkeleton = () => {
   return <div className="h-8 max-w-4/12 bg-gray-300 rounded"></div>;
 };
 
-const TextSkeleton = () => {
-  return <div className="h-4 w-24 bg-gray-300 rounded"></div>;
+export const TextSkeleton = () => {
+  return <div className="h-4 w-24 bg-gray-300 rounded animate-pulse"></div>;
 };
 
 export const ProjectTableSkeleton = () => {
@@ -117,7 +117,7 @@ export const UsersTableSkeleton = () => {
 export const MemberTableSkeleton = () => {
   const rows = Array.from({ length: 3 });
   return (
-    <div className="w-full flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-x-auto w-full bg-white rounded shadow animate-pulse">
       <div className="overflow-x-auto w-full bg-white rounded shadow">
         <table className="min-w-full divide-y divide-gray-200">
           <tbody className="divide-y divide-gray-200 text-sm">

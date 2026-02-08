@@ -11,6 +11,7 @@ import {
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { UpdateStepperDto } from './dto/stepper.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -45,4 +46,16 @@ export class ProjectsController {
     return;
     this.projectsService.remove(id);
   }
+
+  @Patch(':id/stepper')
+  updateStepper(@Param('id') id: string, @Body() updateStepperDto: UpdateStepperDto) {
+    return this.projectsService.updateStepper(id, updateStepperDto);
+  }
+
+
+  @Get(':id/stepper')
+  getStep(@Param('id') id: string) {
+    return this.projectsService.getStep(id);
+  }
+
 }

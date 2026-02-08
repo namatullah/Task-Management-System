@@ -1,3 +1,8 @@
+enum StepStatus {
+  active
+  done
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -21,14 +26,16 @@ model User {
 }
 
 model Project {
-  id           String        @id @default(uuid())
-  name         String
-  description  String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  ownerId      String?
-  owner        User?         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  projectUsers ProjectUser[]
+  id                     String                 @id @default(uuid())
+  name                   String
+  description            String?
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+  ownerId                String?
+  owner                  User?                  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  projectUsers           ProjectUser[]
+  projectStatusHistories ProjectStatusHistory[]
+  status                 String?                @default("Planned")
 }
 
 model ProjectUser {
@@ -39,4 +46,16 @@ model ProjectUser {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   isAdmin   Boolean @default(false)
   isActive  Boolean @default(true)
+}
+
+model ProjectStatusHistory {
+  id        String  @id @default(uuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  changedBy String
+  changedAt DateTime @default(now())
+  notes     String?
+  status    StepStatus
+  step      String
 }

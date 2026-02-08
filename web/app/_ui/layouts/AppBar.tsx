@@ -1,5 +1,6 @@
 "use client";
 import { useAuth } from "@/app/context/AuthContext";
+import { TextSkeleton } from "../shared/skeletons";
 export default function AppBar() {
   const { user, isLoading } = useAuth();
   return (
@@ -10,9 +11,7 @@ export default function AppBar() {
 
       <div className="flex items-center gap-4">
         {isLoading ? (
-          <div className="w-20 h-4 bg-gray-200 rounded animate-pulse">
-            Loading...
-          </div>
+          <TextSkeleton />
         ) : (
           user && (
             <div className="flex items-center space-x-4">
