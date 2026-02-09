@@ -31,32 +31,67 @@ export interface ProjectType {
   description: string;
   createdAt?: string;
 }
-
-export type ProjectStatus =
-  | "Planned"
-  | "In progress"
-  | "In testing"
-  | "On hold"
-  | "Ready to release"
-  | "Complete"
-  | "Canceled";
-
-export const STATUS_FLOW = [
-  "Planned",
-  "In progress",
-  "In testing",
-  "On hold",
-  "Ready to release",
-  "Complete",
-  "Canceled",
-];
-
-export const STATUS_TRANSITIONS: Record<ProjectStatus, ProjectStatus[]> = {
-  Planned: ["Canceled"],
-  "In progress": ["On hold", "Canceled"],
-  "In testing": ["On hold", "Canceled"],
-  "On hold": ["In progress", "In testing", "Canceled"],
-  "Ready to release": ["Complete", "In testing", "Canceled"],
-  Complete: [], // Final state
-  Canceled: [], // Final state
+const OnHoldFlow = {
+  value: "on_hold",
+  label: "On hold",
 };
+const CanceledFlow = {
+  value: "canceled",
+  label: "Canceled",
+};
+const ActiveFlow = {
+  value: "active",
+  label: "Active",
+};
+
+export const StepperFlow = [
+  {
+    value: "planned",
+    label: "Planned",
+    start: true,
+    end: false,
+    change_to: [OnHoldFlow, CanceledFlow],
+  },
+  {
+    value: "in_progress",
+    label: "In progress",
+    start: false,
+    end: false,
+    change_to: [OnHoldFlow, CanceledFlow],
+  },
+  {
+    value: "in_testing",
+    label: "In testing",
+    start: false,
+    end: false,
+    change_to: [OnHoldFlow, CanceledFlow],
+  },
+  {
+    value: "on_hold",
+    label: "On hold",
+    start: false,
+    end: false,
+    change_to: [ActiveFlow, CanceledFlow],
+  },
+  {
+    value: "ready_to_release",
+    label: "Ready to release",
+    start: false,
+    end: false,
+    change_to: null,
+  },
+  {
+    value: "complete",
+    label: "Complete",
+    start: false,
+    end: true,
+    change_to: null,
+  },
+  {
+    value: "canceled",
+    label: "Canceled",
+    start: false,
+    end: true,
+    change_to: null,
+  },
+];

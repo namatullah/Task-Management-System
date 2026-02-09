@@ -10,17 +10,25 @@ const StepperUi = ({ id }: { id: string }) => {
   const [steps, setSteps] = useState();
   const [status, setStatus] = useState("none");
 
+  const [currentStep, setCurrentStep] = useState();
+
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const handleStatusChange = async (newStatus: string) => {
+  const handleStatusChange = async (
+    status: string,
+    isForward: boolean,
+    isFinal: boolean,
+  ) => {
     setIsUpdating(true);
     try {
       await updateProjectStatus(id, {
-        status: newStatus,
+        status: status,
         userId: user?.id,
         notes: "N/A",
+        isForward,
+        isFinal,
       });
-      setStatus(newStatus);
+      setStatus(status);
       // Show success toast
     } catch (error) {
       // Show error toast
@@ -33,8 +41,14 @@ const StepperUi = ({ id }: { id: string }) => {
     const fetchFn = async () => {
       const res = await getStepper(id);
       if (res.length > 0) {
-        const { step } = res.find((step: any) => step.status === "active") ?? 'Complete';
-        setStatus(step);
+        const curStep =
+          res.find((step: any) => step.status === "active") ??
+          res.find((step: any) => step.step === "complete") ??
+          res.find((step: any) => step.step === "canceled") ??
+          null;
+
+        setStatus(curStep?.step);
+        setCurrentStep(curStep);
       }
       setSteps(res);
     };
@@ -50,12 +64,13 @@ const StepperUi = ({ id }: { id: string }) => {
       <div className="mb-8"></div>
 
       <div className="p-6 bg-white rounded-lg shadow">
-        <h2 className="mb-4 text-lg font-semibold">Project Status</h2>
-        <Stepper currentStatus={status} steps = {steps} />
+        <h2 className="mb-4 text-lg font-semibold">Project Progress</h2>
+        <Stepper currentStatus={status} steps={steps} />
         <hr className="my-4" />
         <StatusControl
           steps={steps}
           currentStatus={status}
+          currentStep={currentStep}
           onStatusChange={handleStatusChange}
           isUpdating={isUpdating}
         />

@@ -1,57 +1,56 @@
 "use client";
 
-import {
-  ProjectStatus,
-  STATUS_FLOW,
-  STATUS_TRANSITIONS,
-} from "@/app/_shared/types";
+import { StepperFlow } from "@/app/_shared/types";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
   CheckIcon,
 } from "@heroicons/react/24/outline";
 import { LoadingButton } from "@/app/_ui/shared/LoadingButton";
-import { useState } from "react";
 
 interface StatusControlProps {
   steps: any;
   currentStatus: string;
-  onStatusChange: (newStatus: string) => Promise<void>;
+  currentStep: any;
+  onStatusChange: (
+    status: string,
+    isForward: boolean,
+    isFinal: boolean,
+  ) => Promise<void>;
   isUpdating?: boolean;
 }
 
 export default function StatusControl({
   steps,
   currentStatus,
+  currentStep,
   onStatusChange,
   isUpdating = false,
 }: StatusControlProps) {
-  const [final, setFinal] = useState(false);
-
-  const currentIndex = STATUS_FLOW.indexOf(currentStatus);
+  const currentIndex = StepperFlow.findIndex(
+    (item) => item.value === currentStatus,
+  );
   const isFirst = currentIndex === 0;
-  const isLast = currentIndex === STATUS_FLOW.length - 1;
-  const isFinalState =
-    currentStatus === "Complete" || currentStatus === "Canceled";
+  const isLast = [5, 6].includes(currentIndex);
+  const final =
+    ["complete", "canceled"].includes(currentStep?.step) &&
+    currentStep.status === "done"
+      ? true
+      : false;
 
-  // Get allowed next statuses
-  // const allowedNextStatuses = STATUS_TRANSITIONS[currentStatus] || [];
-
-  // For simpler flow: next and previous in sequence
-
-  const nextStatus = isLast
+  const curStep = StepperFlow[currentIndex];
+  const nextStep = isLast
     ? null
-    : STATUS_FLOW[currentIndex == 2 ? currentIndex + 2 : currentIndex + 1];
+    : StepperFlow[currentIndex == 2 ? currentIndex + 2 : currentIndex + 1];
 
-  const prevStatus = isFirst ? null : STATUS_FLOW[currentIndex - 1];
+  const prevStep = isFirst ? null : StepperFlow[currentIndex - 1];
 
-  const handleStatusChange = async (status: ProjectStatus) => {
-    if (["Complete", "Canceled"].includes(currentStatus)) {
-      setFinal(true);
-    } else {
-      setFinal(false);
-    }
-    await onStatusChange(status);
+  const handleStatusChange = async (
+    status: string,
+    isForward: boolean,
+    isFinal: boolean,
+  ) => {
+    await onStatusChange(status, isForward, isFinal);
   };
   if (final) {
     return (
@@ -72,38 +71,44 @@ export default function StatusControl({
           <>
             <LoadingButton
               type="button"
-              onClick={() => prevStatus && handleStatusChange(prevStatus)}
-              disabled={!prevStatus || isUpdating}
+              onClick={() =>
+                prevStep?.value &&
+                handleStatusChange(prevStep.value, false, false)
+              }
+              disabled={!prevStep?.value || isUpdating}
               size="sm"
             >
               <ArrowLeftIcon className="w-4 h-4 mr-2" />
-              Previous: {prevStatus || "N/A"}
+              {prevStep?.label || "N/A"}
             </LoadingButton>
 
             <span className="text-sm font-medium text-gray-600">
-              {currentStatus}
+              {curStep.label}
             </span>
             <LoadingButton
               type="button"
-              onClick={() => nextStatus && handleStatusChange(nextStatus)}
-              disabled={!nextStatus || isUpdating}
+              onClick={() =>
+                nextStep?.value
+                  ? handleStatusChange(nextStep.value, true, false)
+                  : handleStatusChange(curStep.value, true, true)
+              }
               variant="primary"
               size="sm"
             >
-              {isFinalState ? (
-                <p>complete</p>
+              {curStep?.end ? (
+                "Complete?"
               ) : (
-                <p>
-                  Next: {nextStatus || "N/A"}
+                <>
+                  {nextStep?.label}
                   <ArrowRightIcon className="w-4 h-4 ml-2" />
-                </p>
+                </>
               )}
             </LoadingButton>
           </>
         ) : (
           <LoadingButton
             type="button"
-            onClick={() => handleStatusChange("Planned")}
+            onClick={() => handleStatusChange("planned", true, false)}
             variant="primary"
             size="sm"
           >
@@ -113,23 +118,24 @@ export default function StatusControl({
         )}
       </div>
 
-      {/* All Available Statuses */}
-      {/* <div className="pt-4 border-t">
-        <p className="mb-2 text-sm font-medium text-gray-700">Change to:</p>
-        <div className="flex flex-wrap gap-2">
-          {allowedNextStatuses.map((status: any) => (
-            <LoadingButton
-              key={status}
-              type="button"
-              onClick={() => handleStatusChange(status)}
-              isLoading={isUpdating}
-              size="sm"
-            >
-              {status}
-            </LoadingButton>
-          ))}
+      {curStep?.change_to && (
+        <div className="pt-4 border-t">
+          <p className="mb-2 text-sm font-medium text-gray-700">Change to:</p>
+          <div className="flex flex-wrap gap-2">
+            {curStep.change_to?.map((ch: any) => (
+              <LoadingButton
+                key={ch.value}
+                type="button"
+                onClick={() => handleStatusChange(ch.value, true, false)}
+                isLoading={isUpdating}
+                size="sm"
+              >
+                {ch.label}
+              </LoadingButton>
+            ))}
+          </div>
         </div>
-      </div> */}
+      )}
     </div>
   );
 }

@@ -11,15 +11,15 @@ export class ProjectsService {
   async create(data: CreateProjectDto) {
     const project = await this.prisma.project.create({ data });
 
-    await this.prisma.projectStatusHistory.create({
-      data: {
-        projectId: project.id,
-        changedBy: data.ownerId,
-        notes: '',
-        status: 'active',
-        step: 'Planned',
-      },
-    });
+    // await this.prisma.projectStatusHistory.create({
+    //   data: {
+    //     projectId: project.id,
+    //     changedBy: data.ownerId,
+    //     notes: '',
+    //     status: 'active',
+    //     step: 'Planned',
+    //   },
+    // });
 
     return project;
   }
@@ -64,35 +64,64 @@ export class ProjectsService {
   }
 
   async updateStepper(id: string, data: UpdateStepperDto) {
-    await this.prisma.project.update({
-      where: { id },
-      data: { status: data.status },
-    });
-
-    const activeStatus = await this.prisma.projectStatusHistory.findFirst({
-      where: { projectId: id, status: 'active' },
-    });
-    if (activeStatus) {
-      await this.prisma.projectStatusHistory.update({
-        where: { id: activeStatus.id },
-        data: { status: 'done' },
-      });
-    }
-    if (!['Complete', 'Canceled'].includes(data.status)) {
-      const projectStatus = await this.prisma.projectStatusHistory.create({
-        data: {
+    return this.prisma.$transaction(async (tx) => {
+      const activeStatus = await tx.projectStatusHistory.findFirst({
+        where: {
           projectId: id,
-          changedBy: data.userId,
-          notes: data.notes,
           status: 'active',
+        },
+        orderBy: { changedAt: 'desc' },
+      });
+
+
+      // ======================
+      // FORWARD
+      // ======================
+      if (data.isForward) {
+        if (activeStatus) {
+          await tx.projectStatusHistory.update({
+            where: { id: activeStatus.id },
+            data: { status: 'done' },
+          });
+        }
+
+        if (data.isFinal) return activeStatus;
+
+        return tx.projectStatusHistory.create({
+          data: {
+            projectId: id,
+            changedBy: data.userId,
+            notes: data.notes,
+            status: 'active',
+            step: data.status,
+          },
+        });
+      }
+
+      // ======================
+      // BACKWARD
+      // ======================
+      if (!activeStatus) return null;
+
+      await tx.projectStatusHistory.delete({
+        where: { id: activeStatus.id },
+      });
+
+      const previous = await tx.projectStatusHistory.findFirst({
+        where: {
+          projectId: id,
           step: data.status,
         },
+        orderBy: { changedAt: 'desc' },
       });
 
-      return projectStatus;
-    } else {
-      return activeStatus;
-    }
+      if (!previous) return null;
+
+      return tx.projectStatusHistory.update({
+        where: { id: previous.id },
+        data: { status: 'active' },
+      });
+    });
   }
 
   async getStep(id: string) {

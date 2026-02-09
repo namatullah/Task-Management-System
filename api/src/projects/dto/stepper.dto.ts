@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 
 export class UpdateStepperDto {
   @IsString()
@@ -9,4 +9,10 @@ export class UpdateStepperDto {
 
   @IsString()
   userId: string;
+
+  @IsBoolean()
+  isForward: boolean;
+
+  @IsBoolean()
+  isFinal: boolean;
 }
