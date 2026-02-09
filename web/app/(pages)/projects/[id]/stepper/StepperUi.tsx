@@ -9,7 +9,8 @@ const StepperUi = ({ id }: { id: string }) => {
   const { user } = useAuth();
   const [steps, setSteps] = useState();
   const [status, setStatus] = useState("none");
-
+  const notes =
+    "I am powered by coding. I am powered by coding. I am powered by coding. I am powered by coding. ";
   const [currentStep, setCurrentStep] = useState();
 
   const [isUpdating, setIsUpdating] = useState(false);
@@ -24,7 +25,7 @@ const StepperUi = ({ id }: { id: string }) => {
       await updateProjectStatus(id, {
         status: status,
         userId: user?.id,
-        notes: "N/A",
+        notes: notes,
         isForward,
         isFinal,
       });
@@ -60,25 +61,17 @@ const StepperUi = ({ id }: { id: string }) => {
     return <div>Loading...</div>;
   }
   return (
-    <div className="p-6">
-      <div className="mb-8"></div>
-
-      <div className="p-6 bg-white rounded-lg shadow">
-        <h2 className="mb-4 text-lg font-semibold">Project Progress</h2>
-        <Stepper currentStatus={status} steps={steps} />
-        <hr className="my-4" />
-        <StatusControl
-          steps={steps}
-          currentStatus={status}
-          currentStep={currentStep}
-          onStatusChange={handleStatusChange}
-          isUpdating={isUpdating}
-        />
-      </div>
-
-      <div className="mt-8">
-        <h3 className="mb-4 text-lg font-semibold">Status History</h3>
-      </div>
+    <div className="p-6 bg-white rounded-lg shadow w-full">
+      <h2 className="mb-4 text-lg font-semibold">Project Progress</h2>
+      <Stepper currentStatus={status} steps={steps} />
+      <hr className="my-4" />
+      <StatusControl
+        steps={steps}
+        currentStatus={status}
+        currentStep={currentStep}
+        onStatusChange={handleStatusChange}
+        isUpdating={isUpdating}
+      />
     </div>
   );
 };

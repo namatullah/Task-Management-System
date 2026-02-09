@@ -12,15 +12,11 @@ const page = async (props: { params: Promise<{ id: string }> }) => {
         <table className="min-w-full divide-y divide-gray-200">
           <tbody className="divide-y divide-gray-200">
             <tr className="bg-gray-50">
-              <td className="px-6 py-4 whitespace-nowrap align-top" width="30%">
+              <td className="px-6 py-4 whitespace-nowrap align-top" width="70%">
                 <p className="text-xl">{project.name}</p>
                 <p className="text-wrap text-sm">{project.description}</p>
                 <StepperUi id={id} />
               </td>
-              <td
-                className="px-6 py-4 whitespace-nowrap align-top"
-                width="30%"
-              ></td>
               <td className="px-6 py-4 whitespace-nowrap align-top" width="30%">
                 <Members project={project} />
               </td>

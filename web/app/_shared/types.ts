@@ -75,7 +75,7 @@ export const StepperFlow = [
   },
   {
     value: "ready_to_release",
-    label: "Ready to release",
+    label: "Releasing",
     start: false,
     end: false,
     change_to: null,

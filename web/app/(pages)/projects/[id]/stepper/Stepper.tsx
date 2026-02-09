@@ -1,6 +1,8 @@
 "use client";
 
 import { StepperFlow } from "@/app/_shared/types";
+import { useState } from "react";
+import View from "./view";
 import { CheckIcon } from "@heroicons/react/24/outline";
 
 export default function Stepper({
@@ -35,7 +37,7 @@ export default function Stepper({
           } else {
             getStepColor = "bg-gray-200 text-gray-500";
           }
-
+          const thisStep = steps.find((ths: any) => ths.step === stf.value);
           return (
             <div key={stf.value} className="flex items-center flex-1">
               <div className="flex flex-col items-center">
@@ -49,12 +51,10 @@ export default function Stepper({
                     <span className="text-sm font-semibold">{index + 1}</span>
                   )}
                 </button>
-                <span className="mt-2 text-xs font-medium text-gray-700">
-                  {stf.label}
-                </span>
+                <View data={thisStep} stf={stf} />
               </div>
               {index < StepperFlow.length - 1 && (
-                <div className={`flex-1 h-1 mx-4 ${getLineColor(index)}`} />
+                <div className={`flex-1 h-1 mx-1 mb-4 ${getLineColor(index)}`} />
               )}
             </div>
           );

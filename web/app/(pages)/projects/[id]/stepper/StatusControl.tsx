@@ -129,6 +129,7 @@ export default function StatusControl({
                 onClick={() => handleStatusChange(ch.value, true, false)}
                 isLoading={isUpdating}
                 size="sm"
+                className=""
               >
                 {ch.label}
               </LoadingButton>
