@@ -133,15 +133,16 @@ export default function StatusControl({
                   )}
                 </button>
 
-                {curStep?.change_to &&
-                  curStep.change_to?.map((ch: any) => (
-                    <button
-                      onClick={() => handleStatusChange(ch.value, true, false)}
-                      className="btn btn-red"
-                    >
-                      Cancel
-                    </button>
-                  ))}
+                {curStep?.change_to && (
+                  <button
+                    onClick={() =>
+                      handleStatusChange(curStep?.change_to.value, true, false)
+                    }
+                    className="btn btn-red"
+                  >
+                    Cancel
+                  </button>
+                )}
               </div>
             </>
           ) : (
