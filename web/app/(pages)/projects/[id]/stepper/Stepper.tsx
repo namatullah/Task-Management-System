@@ -1,9 +1,8 @@
 "use client";
 
 import { StepperFlow } from "@/app/_shared/types";
-import { useState } from "react";
-import View from "./view";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import View from "./view";
 
 export default function Stepper({
   currentStatus,
@@ -25,38 +24,65 @@ export default function Stepper({
     .filter((step: any) => step.status === "done")
     .map((step: any) => step.step);
 
-  let getStepColor;
   return (
     <div className="w-full">
+      {/* MOBILE — Vertical */}
+      <div className="flex flex-col gap-4 md:hidden">
+        {StepperFlow.map((stf, index) => {
+          const isDone = dones.includes(stf.value);
+          const isActive = stf.value === currentStatus;
+          const thisStep = steps.find((ths: any) => ths.step === stf.value);
+
+          return (
+            <div key={stf.value} className="flex items-center gap-3">
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs
+              ${
+                isDone
+                  ? "bg-green-500 text-white"
+                  : isActive
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-500"
+              }`}
+              >
+                {isDone ? <CheckIcon className="w-4 h-4" /> : index + 1}
+              </div>
+
+              <View data={thisStep} stf={stf} />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* DESKTOP — Horizontal */}
       <div className="hidden md:flex items-center justify-between">
         {StepperFlow.map((stf, index) => {
-          if (dones.includes(stf.value)) {
-            getStepColor = "bg-green-500 text-white";
-          } else if (stf.value === currentStatus) {
-            getStepColor = "bg-blue-500 text-white";
-          } else {
-            getStepColor = "bg-gray-200 text-gray-500";
-          }
+          let getStepColor = dones.includes(stf.value)
+            ? "bg-green-500 text-white"
+            : stf.value === currentStatus
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-500";
+
           const thisStep = steps.find((ths: any) => ths.step === stf.value);
+
           return (
-            <div key={stf.value} className="w-full flex items-center flex-1">
+            <div key={stf.value} className="flex-1 flex items-center">
               <div className="flex flex-col items-center">
-                <button
-                  type="button"
-                  className={`flex items-center justify-center w-10 h-10 rounded-full ${getStepColor} cursor-default`}
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center ${getStepColor}`}
                 >
                   {dones.includes(stf.value) ? (
                     <CheckIcon className="w-5 h-5" />
                   ) : (
-                    <span className="text-sm font-semibold">{index + 1}</span>
+                    index + 1
                   )}
-                </button>
+                </div>
+
                 <View data={thisStep} stf={stf} />
               </div>
+
               {index < StepperFlow.length - 1 && (
-                <div
-                  className={`flex-1 h-1 mx-1 mb-4 ${getLineColor(index)}`}
-                />
+                <div className={`flex-1 h-1 mx-2 ${getLineColor(index)}`} />
               )}
             </div>
           );

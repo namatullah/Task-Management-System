@@ -23,3 +23,11 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
 };
 
 export const PAGINATION = { ITEMS_PER_PAGE: 10 };
+
+export const DateHelper = (iso: string) => {
+  const date = new Date(iso);
+  const formattedDate = date.toISOString().split("T")[0];
+  const formattedTime = date.toISOString().split("T")[1].split(".")[0];
+
+  return formattedDate + " | " + formattedTime;
+};

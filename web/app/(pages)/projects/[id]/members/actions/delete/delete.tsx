@@ -44,10 +44,13 @@ const DeleteMember = ({ setOpen, setMember, member }: PropsType) => {
         </div>
         <hr className="text-blue-100 my-4" />
         <form action={formAction} className="space-y-4">
-          <p>
-            Are you sure, you want to delete the <b>{member.user.name}</b> from
-            this project?
-          </p>
+          <div className="flex flex-col w-full">
+            <p className="whitespace-normal wrap-break-words w-full text-sm">
+              Are you sure, you want to delete the <b>{member.user.name}</b>{" "}
+              from this project?
+            </p>
+          </div>
+
           <div aria-live="polite" aria-atomic="true">
             {state.message && (
               <p className="mt-2 text-sm text-red-500">{state.message}</p>

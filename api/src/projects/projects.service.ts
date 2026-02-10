@@ -3,25 +3,14 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateStepperDto } from './dto/stepper.dto';
+import { retry } from 'rxjs';
 
 @Injectable()
 export class ProjectsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateProjectDto) {
-    const project = await this.prisma.project.create({ data });
-
-    // await this.prisma.projectStatusHistory.create({
-    //   data: {
-    //     projectId: project.id,
-    //     changedBy: data.ownerId,
-    //     notes: '',
-    //     status: 'active',
-    //     step: 'Planned',
-    //   },
-    // });
-
-    return project;
+    return await this.prisma.project.create({ data });
   }
 
   async findAll(query: string, page: number, ITEMS_PER_PAGE: number) {
@@ -48,7 +37,10 @@ export class ProjectsService {
   }
 
   async findOne(id: string) {
-    return await this.prisma.project.findUnique({ where: { id } });
+    return await this.prisma.project.findUnique({
+      where: { id },
+      include: { owner: { select: { name: true } } },
+    });
   }
 
   async update(id: string, data: UpdateProjectDto) {
@@ -64,6 +56,8 @@ export class ProjectsService {
   }
 
   async updateStepper(id: string, data: UpdateStepperDto) {
+    console.log(id);
+    console.log(data);
     return this.prisma.$transaction(async (tx) => {
       const activeStatus = await tx.projectStatusHistory.findFirst({
         where: {
@@ -126,7 +120,7 @@ export class ProjectsService {
   async getStep(id: string) {
     return await this.prisma.projectStatusHistory.findMany({
       where: { projectId: id },
-      orderBy: { changedAt:'asc' },
+      orderBy: { changedAt: 'asc' },
     });
   }
 }

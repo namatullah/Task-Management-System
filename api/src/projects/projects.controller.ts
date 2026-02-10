@@ -48,14 +48,15 @@ export class ProjectsController {
   }
 
   @Patch(':id/stepper')
-  updateStepper(@Param('id') id: string, @Body() updateStepperDto: UpdateStepperDto) {
+  updateStepper(
+    @Param('id') id: string,
+    @Body() updateStepperDto: UpdateStepperDto,
+  ) {
     return this.projectsService.updateStepper(id, updateStepperDto);
   }
-
 
   @Get(':id/stepper')
   getStep(@Param('id') id: string) {
     return this.projectsService.getStep(id);
   }
-
 }

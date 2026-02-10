@@ -13,14 +13,11 @@ const StepperUi = ({ id }: { id: string }) => {
   const notes = "I am powered by coding.";
   const [currentStep, setCurrentStep] = useState();
 
-  const [isUpdating, setIsUpdating] = useState(false);
-
   const handleStatusChange = async (
     status: string,
     isForward: boolean,
     isFinal: boolean,
   ) => {
-    setIsUpdating(true);
     try {
       await updateProjectStatus(id, {
         status: status,
@@ -34,9 +31,7 @@ const StepperUi = ({ id }: { id: string }) => {
       setLoad(true);
       // Show success toast
     } catch (error) {
-      // Show error toast
-    } finally {
-      setIsUpdating(false);
+      console.log(error);
     }
   };
 
@@ -56,22 +51,22 @@ const StepperUi = ({ id }: { id: string }) => {
     };
 
     fetchFn();
-    setLoad(false)
+    setLoad(false);
   }, [load]);
 
   if (!steps) {
     return <div>Loading...</div>;
   }
   return (
-    <div className="p-6 bg-white rounded shadow w-full">
+    <div className="p-4 md:p-6 bg-white rounded shadow w-full overflow-x-auto">
       <Stepper currentStatus={status} steps={steps} />
       <hr className="text-blue-100 my-4" />
       <StatusControl
+        projectId={id}
         steps={steps}
         currentStatus={status}
         currentStep={currentStep}
-        onStatusChange={handleStatusChange}
-        isUpdating={isUpdating}
+        setLoad={setLoad}
       />
     </div>
   );

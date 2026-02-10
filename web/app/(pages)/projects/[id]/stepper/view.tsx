@@ -1,3 +1,4 @@
+import { DateHelper } from "@/app/_shared/helper";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { useState } from "react";
@@ -26,11 +27,25 @@ const View = ({ data, stf }: any) => {
             </div>
             <hr className="text-blue-100 my-4" />
             <form className="space-y-4">
-              <div className="font-semibold">{stf.label}</div>
-              <p className="text-sm">{data.notes}</p>
-              <p>
-                Changed At: {data.changedAt} <br /> Changed By: {data.changedBy}
+              <h3 className="text-xl font-semibold text-gray-900">
+                {stf.label}
+              </h3>
+
+              <p className="mt-1 text-sm text-gray-600 leading-relaxed">
+                {data.notes}
               </p>
+
+              <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+                <div>
+                  <span className="font-medium text-gray-500">Changed At</span>
+                  <p className="text-gray-900">{DateHelper(data.changedAt)}</p>
+                </div>
+
+                <div>
+                  <span className="font-medium text-gray-500">Changed By</span>
+                  <p className="text-gray-900">{data.changedBy}</p>
+                </div>
+              </div>
 
               <div className="flex justify-end gap-2 pt-2">
                 <button
