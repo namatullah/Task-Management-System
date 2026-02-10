@@ -22,12 +22,10 @@ const page = async (props: { params: Promise<{ id: string }> }) => {
                   {project.name}
                 </h3>
 
-                {/* Description */}
                 <p className="mt-1 text-sm text-gray-600 leading-relaxed">
                   {project.description}
                 </p>
 
-                {/* Meta Info */}
                 <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm">
                   <div>
                     <span className="font-medium text-gray-500">
