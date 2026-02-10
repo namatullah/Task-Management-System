@@ -39,7 +39,7 @@ export default function Stepper({
           }
           const thisStep = steps.find((ths: any) => ths.step === stf.value);
           return (
-            <div key={stf.value} className="flex items-center flex-1">
+            <div key={stf.value} className="w-full flex items-center flex-1">
               <div className="flex flex-col items-center">
                 <button
                   type="button"
@@ -54,7 +54,9 @@ export default function Stepper({
                 <View data={thisStep} stf={stf} />
               </div>
               {index < StepperFlow.length - 1 && (
-                <div className={`flex-1 h-1 mx-1 mb-4 ${getLineColor(index)}`} />
+                <div
+                  className={`flex-1 h-1 mx-1 mb-4 ${getLineColor(index)}`}
+                />
               )}
             </div>
           );

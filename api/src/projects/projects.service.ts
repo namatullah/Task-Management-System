@@ -73,7 +73,6 @@ export class ProjectsService {
         orderBy: { changedAt: 'desc' },
       });
 
-
       // ======================
       // FORWARD
       // ======================
@@ -127,6 +126,7 @@ export class ProjectsService {
   async getStep(id: string) {
     return await this.prisma.projectStatusHistory.findMany({
       where: { projectId: id },
+      orderBy: { changedAt:'asc' },
     });
   }
 }

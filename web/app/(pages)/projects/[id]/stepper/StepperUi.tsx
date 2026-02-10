@@ -9,8 +9,8 @@ const StepperUi = ({ id }: { id: string }) => {
   const { user } = useAuth();
   const [steps, setSteps] = useState();
   const [status, setStatus] = useState("none");
-  const notes =
-    "I am powered by coding. I am powered by coding. I am powered by coding. I am powered by coding. ";
+  const [load, setLoad] = useState(false);
+  const notes = "I am powered by coding.";
   const [currentStep, setCurrentStep] = useState();
 
   const [isUpdating, setIsUpdating] = useState(false);
@@ -29,7 +29,9 @@ const StepperUi = ({ id }: { id: string }) => {
         isForward,
         isFinal,
       });
+
       setStatus(status);
+      setLoad(true);
       // Show success toast
     } catch (error) {
       // Show error toast
@@ -47,7 +49,6 @@ const StepperUi = ({ id }: { id: string }) => {
           res.find((step: any) => step.step === "complete") ??
           res.find((step: any) => step.step === "canceled") ??
           null;
-
         setStatus(curStep?.step);
         setCurrentStep(curStep);
       }
@@ -55,16 +56,16 @@ const StepperUi = ({ id }: { id: string }) => {
     };
 
     fetchFn();
-  }, [status]);
+    setLoad(false)
+  }, [load]);
 
   if (!steps) {
     return <div>Loading...</div>;
   }
   return (
-    <div className="p-6 bg-white rounded-lg shadow w-full">
-      <h2 className="mb-4 text-lg font-semibold">Project Progress</h2>
+    <div className="p-6 bg-white rounded shadow w-full">
       <Stepper currentStatus={status} steps={steps} />
-      <hr className="my-4" />
+      <hr className="text-blue-100 my-4" />
       <StatusControl
         steps={steps}
         currentStatus={status}

@@ -52,6 +52,12 @@ export default function StatusControl({
   ) => {
     await onStatusChange(status, isForward, isFinal);
   };
+  let lastDone: any;
+  if (currentStatus === "canceled") {
+    const { step } = steps.findLast((step: any) => step.status !== "active");
+    lastDone = StepperFlow.find((stf) => stf.value === step);
+  }
+
   if (final) {
     return (
       <div className="p-4 bg-gray-50 rounded-lg">
@@ -69,72 +75,69 @@ export default function StatusControl({
       <div className="flex items-center justify-between gap-4 pt-2">
         {steps?.length > 0 ? (
           <>
-            <LoadingButton
-              type="button"
+            <button
               onClick={() =>
-                prevStep?.value &&
-                handleStatusChange(prevStep.value, false, false)
+                currentStatus === "canceled"
+                  ? handleStatusChange(lastDone.value, false, false)
+                  : prevStep?.value &&
+                    handleStatusChange(prevStep.value, false, false)
               }
-              disabled={!prevStep?.value || isUpdating}
-              size="sm"
+              className="btn btn-blue flex items-center justify-center"
+              disabled={prevStep === null}
             >
               <ArrowLeftIcon className="w-4 h-4 mr-2" />
-              {prevStep?.label || "N/A"}
-            </LoadingButton>
+              {currentStatus === "canceled"
+                ? lastDone.label
+                : prevStep?.label || "Not Started"}
+            </button>
 
-            <span className="text-sm font-medium text-gray-600">
+            <span className="text-sm font-medium text-blue-600">
               {curStep.label}
             </span>
-            <LoadingButton
-              type="button"
+
+            <button
               onClick={() =>
                 nextStep?.value
                   ? handleStatusChange(nextStep.value, true, false)
                   : handleStatusChange(curStep.value, true, true)
               }
-              variant="primary"
-              size="sm"
+              className="btn btn-blue flex items-center justify-center"
             >
               {curStep?.end ? (
-                "Complete?"
+                currentStatus === "complete" ? (
+                  "Complete"
+                ) : (
+                  "Canceled"
+                )
               ) : (
                 <>
                   {nextStep?.label}
                   <ArrowRightIcon className="w-4 h-4 ml-2" />
                 </>
               )}
-            </LoadingButton>
+            </button>
           </>
         ) : (
-          <LoadingButton
-            type="button"
+          <button
             onClick={() => handleStatusChange("planned", true, false)}
-            variant="primary"
-            size="sm"
+            className="btn btn-blue"
           >
-            Start
-            <ArrowRightIcon className="w-4 h-4 ml-2" />
-          </LoadingButton>
+            Start <ArrowRightIcon className="w-4 h-4 ml-2" />
+          </button>
         )}
       </div>
+      <hr className="text-blue-100 my-4" />
 
       {curStep?.change_to && (
-        <div className="pt-4 border-t">
-          <p className="mb-2 text-sm font-medium text-gray-700">Change to:</p>
-          <div className="flex flex-wrap gap-2">
-            {curStep.change_to?.map((ch: any) => (
-              <LoadingButton
-                key={ch.value}
-                type="button"
-                onClick={() => handleStatusChange(ch.value, true, false)}
-                isLoading={isUpdating}
-                size="sm"
-                className=""
-              >
-                {ch.label}
-              </LoadingButton>
-            ))}
-          </div>
+        <div className="justify-end flex">
+          {curStep.change_to?.map((ch: any) => (
+            <button
+              onClick={() => handleStatusChange(ch.value, true, false)}
+              className="btn btn-red"
+            >
+              Cancel
+            </button>
+          ))}
         </div>
       )}
     </div>

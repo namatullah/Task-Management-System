@@ -31,17 +31,9 @@ export interface ProjectType {
   description: string;
   createdAt?: string;
 }
-const OnHoldFlow = {
-  value: "on_hold",
-  label: "On hold",
-};
 const CanceledFlow = {
   value: "canceled",
   label: "Canceled",
-};
-const ActiveFlow = {
-  value: "active",
-  label: "Active",
 };
 
 export const StepperFlow = [
@@ -50,35 +42,28 @@ export const StepperFlow = [
     label: "Planned",
     start: true,
     end: false,
-    change_to: [OnHoldFlow, CanceledFlow],
+    change_to: [CanceledFlow],
   },
   {
     value: "in_progress",
     label: "In progress",
     start: false,
     end: false,
-    change_to: [OnHoldFlow, CanceledFlow],
+    change_to: [CanceledFlow],
   },
   {
     value: "in_testing",
     label: "In testing",
     start: false,
     end: false,
-    change_to: [OnHoldFlow, CanceledFlow],
-  },
-  {
-    value: "on_hold",
-    label: "On hold",
-    start: false,
-    end: false,
-    change_to: [ActiveFlow, CanceledFlow],
+    change_to: [CanceledFlow],
   },
   {
     value: "ready_to_release",
     label: "Releasing",
     start: false,
     end: false,
-    change_to: null,
+    change_to: [CanceledFlow],
   },
   {
     value: "complete",
